@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react"
-import PhotosUploader from "../PhotosUploader"
+import PhotoUploader from "../PhotoUploader"
 import FitbitIcon from '@mui/icons-material/Fitbit';
-import { Link, useParams, useNavigate,Navigate } from "react-router-dom";
+import { Link, useParams, useNavigate,Navigate,  } from "react-router-dom";
+// import { useHistory } from 'react-router-dom';
 
 import { UserContext } from "../UserContex";
 import axios from "axios";
@@ -11,7 +12,7 @@ export default function ProfileForm() {
     const [name, setName] = useState('')
     const [bio, setBio] = useState('')
     const [social, setSocial] = useState('')
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser,gRedirect } = useContext(UserContext);
     const {id} = useParams();
     const {profile, setProfile} = useContext(UserContext);
     const [redirect, setRedirect] = useState(null);
@@ -20,6 +21,29 @@ export default function ProfileForm() {
     useEffect(() => {
         console.log('Profile Photo Updated:', profilePhoto);
     }, [profilePhoto]);
+
+
+ 
+    useEffect(()=>{
+        async function fetchData(userId){
+            try{
+                const {data} = await axios.get(`/user_profile?id=${userId}`, { withCredentials: true});
+                setUser(data);
+                navigate('/')
+                console.log(data);
+            } catch(error){
+                console.log(error);
+        }}
+        if(user && user.id){
+            fetchData(user.id);
+        }
+  },[user])
+
+
+    useEffect(() => {
+        // This can be enhanced to securely fetch user info
+        localStorage.setItem('isAuthenticated', true);
+    }, []);
 
 
      async function handleClick() {
@@ -37,21 +61,25 @@ export default function ProfileForm() {
             console.log(error);
         }
     }
-
+    {user ? (
+        <div>{user.name}</div>
+    ) : (
+        <div>Loading...</div>
+    )}
     async function formSubmit() {
       
         try {
             console.log("Request URL: ", "/profileDetails/" + id);
-            const {data} = await axios.post(`/profileDetails/${id}`, { name, bio, social, profilePhoto });
+            const {data} = await axios.post(`/profileDetails/${user.id}`, { name, bio, social, profilePhoto });
             // console.log(id);
             setProfile(data);
-            console.log(JSON.stringify(data))
-            console.log(JSON.stringify(profile))
-            console.log(data+"Profile Updated");
-            console.log(profile, "Profile Updated")
+            // console.log(JSON.stringify(data))
+            // console.log(JSON.stringify(profile))
+            // console.log(data+"Profile Updated");
+            // console.log(profile, "Profile Updated")
             // navigate('/');
             // console.log(data+"Profile Updated");
-            // window.location.href = '/';
+             
             setRedirect(true);
         } catch (error) {
             console.log(error+"Profile Update Failed");
@@ -64,6 +92,7 @@ export default function ProfileForm() {
     }
 
 
+    // setName(user.name);
     return (
         <div className="relative bg-gray-400 sm:p-8  max-h-screen overflow-hidden">
             <Link to={'/'} className="absolute top-4 left-4 sm:top-8 sm:left-8">
@@ -79,10 +108,13 @@ export default function ProfileForm() {
                     <h2 className="text-xl sm:text-3xl">Complete your Profile</h2>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
-                    <PhotosUploader photo={profilePhoto} setPhoto={setProfilePhoto} />
+                    <PhotoUploader photo={profilePhoto} setPhoto={setProfilePhoto} />
                     <div className="w-full sm:w-6/12">
                         <label>Name</label>
-                        <input type="text" placeholder={user.name} value={user.name} onChange={(e) => setName(e.target.value)} className="w-full p-2 rounded-md border border-gray-300" />
+                          {!gRedirect && user && (
+                              <input type="text" placeholder={user.name} onChange={(e) => setName(e.target.value)} className="w-full p-2 rounded-md border border-gray-300" />
+                          )}
+                      
                         <label>About</label>
                         <textarea placeholder="Write about yourself" value={bio} onChange={(e) => setBio(e.target.value)} className="w-full p-2 rounded-md border border-gray-300" />
                         <label>Website or social link</label>

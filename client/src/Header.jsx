@@ -1,12 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import MenuIcon from '@mui/icons-material/Menu';
+
+import FitbitIcon from '@mui/icons-material/Fitbit';
 
 import Register from './components/Register';
 import Login from './components/Login';
 import { UserContext } from './UserContex';
 import axios from 'axios';
+import Location from './components/Location';
 
 export default function Header() {
     const [check, setCheck] = useState(true);
@@ -31,13 +34,18 @@ export default function Header() {
     }
     return (
         <div className="flex align-center justify-around my-4">
+            
             <div className="flex gap-8 items-center">
-                <h1 className="text-primary text-2xl">BookMyShow</h1>
-                <input type="text" placeholder=" Search for movies, shows, actors" />
+                <div className='flex items-center gap-2'>
+                     <FitbitIcon/>
+                {/* <h1 className="text-primary text-2xl">BookMyShow</h1> */}
+                </div>
+               
+                {/* <input type="text" placeholder=" Search for movies, shows, actors" /> */}
             </div>
             <div className=" flex gap-4 items-center">
                 <div className="flex gap-1 items-center">
-                    <h1>Location</h1>
+                <Location/>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                     </svg>
@@ -60,6 +68,8 @@ export default function Header() {
                     <Link to={'/profile'}  className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">  profile
                     </Link>
                     <Link to={'/'} onClick={handleClick} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">Logout</Link>
+
+                    
                     <Link to={'/Dashboard'}  className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">DashBoard</Link>
                     </div>
                     

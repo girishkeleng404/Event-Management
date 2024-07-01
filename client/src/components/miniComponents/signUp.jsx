@@ -3,16 +3,20 @@ import AppleIcon from '@mui/icons-material/Apple';
 import FacebookIcon from '@mui/icons-material/Facebook';
 
 export default function SignUp({ name, setEmail, setPassword }) {
+
+    const handleClick = () => {
+        window.location.href = 'http://localhost:5173/auth/google';
+      };
     return (
         <div className="flex flex-col gap-4 mx-auto">
 
             <h1 className='text-2xl font-semibold w-9/12 mx-auto'>Wellcom {name}</h1>
             <div className='w-9/12 mx-auto'>
-                <div className="my-4 flex gap-2 items-center border    rounded-xl border-gray-300 p-2 justify-center max-w-96">
+                <button onClick={handleClick} className="my-4 flex gap-2 items-center border    rounded-xl border-gray-300 p-2 justify-center max-w-96">
 
                     <GoogleIcon />
                     <h1>Continue with Google</h1>
-                </div>
+                </button>
                 <div className="my-4 flex gap-2 items-center border   rounded-xl border-gray-300 p-2 justify-center max-w-96">
 
                     <FacebookIcon />

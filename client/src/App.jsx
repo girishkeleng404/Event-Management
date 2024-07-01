@@ -14,6 +14,11 @@ import Adds from './components/Adds';
  
 import Cards from './components/Cards';
 import Address from './components/Address';
+import NewAds from './components/NewAds';
+// import Profile from './components/miniComponents/ProtectedRoute';
+import ComLogin from './components/miniComponents/comLogin';
+import ProtectedRoute from './components/miniComponents/ProtectedRoute';
+// import ProtectedRoute from './components/miniComponents/ProtectedRoute';
 
 function App() {
 
@@ -25,17 +30,21 @@ function App() {
     
     <Routes>
      <Route path='/' element={<Layout/>}/>
+     <Route path="/" element={<ComLogin />} />
      <Route path='/:name' element={<Layout/>}/>
      <Route index element={<IndexPage/>}/>
      <Route path='/register' element={<Register/>}/>
      <Route path='/login' element={<Login/>}/>
+     {/* <Route path="/profile" component={Profile} /> */}
      <Route path='/profileForm' element={<ProfileForm/>}/>
-     <Route path='/profileForm/:id' element={<ProfileForm/>}/>
      <Route path='/Dashboard' element={<Dashboard/>}/>
      <Route path='/Dashboard/Orders' element={<Order/>}/>
      <Route path='/Dashboard/Adds' element={<Adds/>}/>
      <Route path='/Dashboard/Cards' element={<Cards/>}/>
      <Route path='/Dashboard/Address' element={<Address/>}/>
+     <Route path='/Dashboard/Adds/new' element={<NewAds/>}/>
+
+     <Route path='/auth/google/callback' element={<ProtectedRoute/>}/>
  
     </Routes>
  

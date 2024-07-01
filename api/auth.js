@@ -1,10 +1,13 @@
 // auth.js
 import jwt from 'jsonwebtoken';
+import dotenv from "dotenv"
+
+dotenv.config();
 
 export function generateAuthToken(user) {
   // Your secret key should be stored securely and not hard-coded in real applications.
   // It's used to sign the JWT token and should be kept confidential.
-  const secretKey = 'your_secret_key';
+  const secretKey = process.env.AUTH_SECRET_KEY;
 
   // The payload could include user information and claims
   // For example, you might want to include the user's ID and roles

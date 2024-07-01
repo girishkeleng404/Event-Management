@@ -24,9 +24,9 @@ export default function Login() {
                 <h1></h1>
             </div>
 
-<div className="absolute left-12 top-10">
+<Link to={'/'} className="absolute left-12 top-10">
     <FitbitIcon/>
-</div>
+</Link>
             <div className=" h-screen flex flex-col justify-center items-center bg-white rounded-l-3xl">
                 <div className="flex gap-2 absolute right-8 top-8">
                     <span> Don't have an account? </span>

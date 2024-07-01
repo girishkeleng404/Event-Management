@@ -1,68 +1,94 @@
 import axios from "axios";
-import { useState } from "react"
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useState } from "react";
 
-export default function PhotosUploader({photo,setPhoto }) {
+export default function PhotosUploader({ addedPhotos, onChange }) {
 
-    // const [selectedFile, setSelectedFile] = useState(null)
+    const [photoLink, setPhotoLink] = useState("");
 
-    async function handleChange(e) {
-
-        // setSelectedFile(e.target.files)
-        const selectedFile = e.target.files[0];
-        console.log(selectedFile);
-
-
-        const formData = new FormData();
-        formData.append('profilePhoto', selectedFile);
+    async function addPhotoByLink(ev) {
+        ev.preventDefault();
         try {
-            const response = await axios.post('/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+            const { data } = await axios.post('/upload_by_link', { link: photoLink });
+            console.log(data);
+            onChange(prev => {
+                return [...prev, data];
             })
-            // const {data:fileName}= response;
-            setPhoto(response.data.fileName)
-            console.log(photo)
-            console.log("file uploaded successfully", response.data)
+            setPhotoLink('');
+            console.log(addedPhotos);
         } catch (error) {
-            console.log(error);
+            console.error('Error uploading photo by link:', error);
         }
-
-
     }
 
+    function uploadLocalPhoto(ev){
+        ev.preventDefault();
+        const selectedFiles = ev.target.files;
+        console.log(selectedFiles);
+        const formData = new FormData();
+        for(let i= 0; i<selectedFiles.length;i++){
+            formData.append('photos', selectedFiles[i]);
+        }
+
+        axios.post('/uploads',formData,{
+            headers:{
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(response=>{
+            const {data:fileName} = response;
+            console.log(fileName);
+            onChange(prev=>{
+                return[...prev, fileName[0]];
+            });
+        })
+    }
 
     return (
-        <div className="flex flex-col gap-4">
-            
-                 <div className="rounded-full overflow-hidden flex items-center justify-center">
-                    {!photo ? <AccountCircleIcon style={{fontSize:176}} className="  text-gray-800" /> : <img className="h-44 aspect-square" src={`http://localhost:4000/uploads/${photo}`} alt="img" />}
-               
-                  </div>
-           
+        <div>
 
-           <div>
-             <label className="h-8 w-44 cursor-pointer flex justify-center items-center  gap-1  border bg-transparent rounded-2xl py-6 text-xl text-gray-500">
-                <input type="file" className="hidden" onChange={handleChange} />
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
-                    />
-                </svg>
-                Upload
-            </label>
-           </div>
-           
+            <div className="flex gap-8">
+                <input type="text"
+                    value={photoLink}
+                    onChange={ev => setPhotoLink(ev.target.value)} placeholder="Add using link  ......jpg" />
+                <button onClick={addPhotoByLink} className="bg-primary text-white px-4 rounded-full">Add&nbsp;photo </button>
+            </div>
+
+            <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3  gap-2 mt-4">
+
+                {addedPhotos.length > 0 && addedPhotos.map((link, inx) => {
+                    return(
+                        <div key={inx}>
+                        <img
+                            className="rounded-xl w-full h-48 object-cover"
+                            src={`http://localhost:4000/uploads/${link}`}
+                            alt={`uploaded-${inx}`}
+
+                        />
+                    </div>
+                    )
+                    
+                })}
+
+                <label className="h-48 cursor-pointer flex justify-center items-center gap-1 border bg-transparent rounded-2xl ">
+
+                    <input type="file" multiple className="hidden" onChange={uploadLocalPhoto} />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
+                        />
+                    </svg>
+                    Uploads
+                </label>
+            </div>
+
 
         </div>
     )

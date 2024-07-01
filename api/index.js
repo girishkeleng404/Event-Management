@@ -12,15 +12,26 @@ import passport from "passport";
 import LocalStrategy from "passport-local";
 import { generateAuthToken } from "./auth.js";
 import fs from "fs";
+import cookieParser from "cookie-parser";
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { callbackify } from "util";
+import OpenIDConnectStrategy from "passport-openidconnect";
+import helmet from "helmet";
+import jwt from "jsonwebtoken";
+import env from "dotenv"
 
 
+env.config();
 
 const app = express();
 const port = 4000;
 
 const saltRounds = 10;
+
+const secretKey= process.env.SECTET_KEY;
+
 app.use(session({
-    secret: "Fuck off",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -33,10 +44,14 @@ app.use(session({
 }))
 
 
+ 
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.use(cookieParser());
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -49,11 +64,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const db = new pg.Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'Event-management',
-    password: 'girish12',
-    port: 5432
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT
 })
 db.connect();
 
@@ -123,6 +138,50 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
     res.json(req.user);
 })
 
+
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret:  process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:5173/auth/google/callback'
+    // scope: ['email','profile',]
+},
+ async function (accessToken, resfreshToken, profile,cb){
+
+    try {
+        const check = await db.query("SELECT * FROM users WHERE email = $1",[profile.emails[0].value]);
+        if(check.rows.length ===0){
+            const result = await db.query("INSERT INTO users (name,email,password) VALUES ($1, $2, $3) RETURNING *", [ profile.displayName, profile.emails[0].value, 'google']);
+            console.log(profile);
+            return cb(null, result.rows[0]);
+        } else{
+            return cb(null, check.rows[0]);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+    // return cb(null, profile);
+}
+))
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['openid','email','profile',] })
+)
+
+app.get('/auth/google/callback',
+    passport.authenticate('google',{failureRedirect:'http://localhost:5173'}),
+    (req, res)=>{
+      const user = req.user;
+      console.log(user);
+      console.log("fuck off")
+      const token = jwt.sign(req.user, secretKey);
+      const redirectUrl = `http://localhost:5173/profileForm?token=${token}`;
+
+        // Redirect to the URL with the token
+        res.redirect(redirectUrl);
+    }
+)
+
 app.post('/logout', (req, res, cb) => {
     req.logout((err) => {
         if (err) {
@@ -138,9 +197,9 @@ app.post('/logout', (req, res, cb) => {
         })
     })
 })
-
+ 
 app.get('/profile', async (req, res) => {
-
+    
     if (req.isAuthenticated()) {
         const { id, name, email } = req.user;
 
@@ -149,6 +208,74 @@ app.get('/profile', async (req, res) => {
         res.status(401).json({ message: "Unauthenticated" });
     }
 })
+
+
+ 
+
+app.get('/getUserData', (req, res) => {
+    const token = req.query.token;
+    if (token) {
+        jwt.verify(token, secretKey, (err, user) => {
+            if (err) {
+                return res.status(403).send('Invalid token');
+            }
+            console.log("fuck off")
+            console.log(user);
+            res.json(req.user);
+        });
+    } else {
+        console.log("Token is required")
+        res.status(400).send('Token is required');
+    }
+});
+
+app.get('/user_profile', async(req,res)=>{
+    const userId = req.query.id;
+    try {
+        const result = await db.query("SELECT * FROM user_profile WHERE user_id = $1",[userId])
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        res.json(result.rows[0]);
+    } catch (error) {
+
+        console.log(error)
+        res.status(500).json({ message: "Internal server error" });
+    }
+})
+
+
+// app.get('/profile', async (req, res) => {
+//     // Check if the Authorization header is present
+//     const authHeader = req.headers['authorization'];
+//     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+//     if (token == null) return res.sendStatus(401); // If no token, return 401 Unauthorized
+
+//     try {
+//         // Verify the token
+//         const user = verifyAuthToken(token); // Implement this function based on your auth token verification logic
+
+//         // Assuming verifyAuthToken returns the user if the token is valid
+//         if (user) {
+//             req.user = user; // Optionally set the user in the request if needed
+//             // Proceed with your route logic
+//             if (req.isAuthenticated()) {
+//                 const { id, name, email } = req.user;
+//                 res.json({ id, name, email });
+//             } else {
+//                 res.status(401).json({ message: "Unauthenticated" });
+//             }
+//         } else {
+//             // If the token is not verified
+//             return res.status(403).json({ message: "Token is invalid or expired" });
+//         }
+//     } catch (error) {
+//         // Handle any other errors
+//         return res.status(500).json({ message: "An error occurred verifying the token" });
+//     }
+// });
 
 passport.use(new LocalStrategy({ usernameField: 'email' },
     async (email, password, done) => {
@@ -197,6 +324,31 @@ const storage = multer.diskStorage({
     }
 });
 
+
+const uploaderDir = path.join(__dirname, 'uploads');
+if(!fs.existsSync(uploaderDir)){
+    fs.mkdirSync(uploaderDir);
+}
+app.post('/upload_by_link', async (req, res)=>{
+    const {link} = req.body;
+    const newName = "photo"+Date.now()+'.jpg';
+    const destinationPath = path.join(uploaderDir, newName);
+    try{
+        await imageDownloader.image({
+            url:link,
+            dest:destinationPath
+        })
+        console.log(newName)
+        res.json(newName);
+    } catch(error){
+        console.error("Error downloading image:", error);
+        res.status(500).json({message:"Error downloading image"});
+    }
+});
+
+
+
+
 const upload = multer({ storage: storage });
 
 
@@ -214,20 +366,20 @@ app.post('/upload', upload.single('profilePhoto'), async (req, res) => {
     }
 });
 
-
-// app.post('/profileDetails/:id', async (req, res) => {
-//     const { id } = req.params;
-//     const { name, bio, social, profilePhoto } = req.body;
-//     try {
-//         const profilePhotoArray = [profilePhoto];
-//         const result = await db.query("INSERT INTO user_profile (user_id, name, bio, social_media_link, photos) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, name, bio, social, profilePhotoArray]);
-       
-//         res.json(result.rows[0])
-//     } catch (err) {
-//         console.log(err);
-//         res.json({ message: "error" })
-//     }
-// })
+app.post('/uploads', upload.array('photos', 100), async (req, res) => {
+    if(!req.files || req.files.length ===0){
+        console.error("No files in request.");
+        return res.status(400).send({message:'No files uploaded. Please ensure the form is correctly configured and the field name matches.'});
+    }
+    try{
+        console.log(req.files);
+        const fileNames = req.files.map(file=>file.filename);
+        res.send(fileNames);
+    }catch(error){
+        console.error("Error handling the file upload:", error);
+        res.status(500).send({message:'Error processing the file.'});
+    }
+})
 
 app.post('/profileDetails/:id', async (req, res) => {
     const { id } = req.params;

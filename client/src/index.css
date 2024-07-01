@@ -17,3 +17,24 @@ button.primary{
     /* background-color: #F53850; */
     @apply p-2 bg-primary w-full text-white rounded-xl;
 }
+
+.link-hover-effect {
+    padding: 8px 0;
+    ;
+    
+  }
+  
+  .link-hover-effect a {
+    color: black;
+    background: inherit;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .link-hover-effect:hover a {
+    color: black;
+     
+    /* background: #fef8b0; */
+  }

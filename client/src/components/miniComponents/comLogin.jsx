@@ -4,7 +4,7 @@ import AppleIcon from "@mui/icons-material/Apple";
 import { useContext, useState } from "react";
 import axios from "axios";
 
-import { Navigate } from "react-router-dom"; 
+import { Link, Navigate } from "react-router-dom"; 
 import { UserContext } from "../../UserContex";
 
 export default function ComLogin() {
@@ -44,6 +44,10 @@ export default function ComLogin() {
         // })
     }
 
+    // const handleLogin = () => {
+    //     window.location.href = 'http://localhost:5173/auth/google';
+    //   };
+
     if (redirect) {
         return <Navigate to={'/'}/>
     }
@@ -52,11 +56,11 @@ export default function ComLogin() {
     {error && <div className="text-red-500">{error}</div>}
             <h1 className='text-2xl font-semibold w-9/12 mx-auto'>Wellcome Back</h1>
             <div className='w-9/12 mx-auto'>
-                <div className="my-4 flex gap-2 items-center border    rounded-xl border-gray-300 p-2 justify-center max-w-96">
+                <a href="http://localhost:4000/auth/google"  className="my-4 flex gap-2 items-center border    rounded-xl border-gray-300 p-2 justify-center max-w-96">
 
                     <GoogleIcon />
                     <h1>Continue with Google</h1>
-                </div>
+                </a>
                 <div className="my-4 flex gap-2 items-center border   rounded-xl border-gray-300 p-2 justify-center max-w-96">
 
                     <FacebookIcon />

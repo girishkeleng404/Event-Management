@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 const Sidebar = () => {
   const { pathname } = useLocation();
   const kk = useLocation();
-  console.log(kk)
+  // console.log(kk)
 
   function linkClasses(type = null) {
     let subPage = pathname.split('/')?.[2];
