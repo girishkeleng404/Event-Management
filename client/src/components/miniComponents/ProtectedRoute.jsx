@@ -69,20 +69,6 @@ export default function ProtectedRoute(){
       
     },[token,navigate, setUser])
 
-    useEffect(()=>{
-        async function fetchData(userId){
-            try{
-                const {data} = await axios.get(`/user_profile?id=${userId}`, { withCredentials: true});
-                setUser(data);
-                navigate('/')
-                console.log(data);
-            } catch(error){
-                console.log(error);
-        }}
-        if(user && user.id){
-            fetchData(user.id);
-        }
-  },[])
     return(
         <div>justify</div>
     )

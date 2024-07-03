@@ -35,7 +35,7 @@ function App() {
      <Route index element={<IndexPage/>}/>
      <Route path='/register' element={<Register/>}/>
      <Route path='/login' element={<Login/>}/>
-     {/* <Route path="/profile" component={Profile} /> */}
+     
      <Route path='/profileForm' element={<ProfileForm/>}/>
      <Route path='/Dashboard' element={<Dashboard/>}/>
      <Route path='/Dashboard/Orders' element={<Order/>}/>
@@ -45,6 +45,7 @@ function App() {
      <Route path='/Dashboard/Adds/new' element={<NewAds/>}/>
 
      <Route path='/auth/google/callback' element={<ProtectedRoute/>}/>
+     <Route path='Dashboard/Adds/:id' element={<NewAds/>}/>
  
     </Routes>
  

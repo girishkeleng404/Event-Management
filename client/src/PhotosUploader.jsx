@@ -37,6 +37,9 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
             const {data:fileName} = response;
             console.log(fileName);
             onChange(prev=>{
+                if(!prev){
+                    return [fileName[0]];
+                }
                 return[...prev, fileName[0]];
             });
         })
@@ -54,7 +57,7 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
 
             <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3  gap-2 mt-4">
 
-                {addedPhotos.length > 0 && addedPhotos.map((link, inx) => {
+                {addedPhotos? addedPhotos.map((link, inx) => {
                     return(
                         <div key={inx}>
                         <img
@@ -66,7 +69,7 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
                     </div>
                     )
                     
-                })}
+                }):null}
 
                 <label className="h-48 cursor-pointer flex justify-center items-center gap-1 border bg-transparent rounded-2xl ">
 
