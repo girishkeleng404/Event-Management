@@ -18,6 +18,8 @@ import NewAds from './components/NewAds';
 // import Profile from './components/miniComponents/ProtectedRoute';
 import ComLogin from './components/miniComponents/comLogin';
 import ProtectedRoute from './components/miniComponents/ProtectedRoute';
+import DetailsPage from './components/DetailsPage';
+import Footer from './Footer';
 // import ProtectedRoute from './components/miniComponents/ProtectedRoute';
 
 function App() {
@@ -30,6 +32,7 @@ function App() {
     
     <Routes>
      <Route path='/' element={<Layout/>}/>
+    
      <Route path="/" element={<ComLogin />} />
      <Route path='/:name' element={<Layout/>}/>
      <Route index element={<IndexPage/>}/>
@@ -46,7 +49,9 @@ function App() {
 
      <Route path='/auth/google/callback' element={<ProtectedRoute/>}/>
      <Route path='Dashboard/Adds/:id' element={<NewAds/>}/>
- 
+     <Route path='/DetailsPage/:id' element={<DetailsPage/>}/>
+     
+    
     </Routes>
  
     

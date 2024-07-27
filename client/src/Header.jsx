@@ -36,10 +36,10 @@ export default function Header() {
         <div className="flex align-center justify-around my-4">
             
             <div className="flex gap-8 items-center">
-                <div className='flex items-center gap-2'>
+                <Link to={'/'} className='flex items-center gap-2'>
                      <FitbitIcon/>
                 {/* <h1 className="text-primary text-2xl">BookMyShow</h1> */}
-                </div>
+                </Link>
                
                 {/* <input type="text" placeholder=" Search for movies, shows, actors" /> */}
             </div>

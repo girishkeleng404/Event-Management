@@ -1,10 +1,18 @@
 // import { UserContext } from "../../UserContex";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../UserContex";
+import EditIcon from '@mui/icons-material/Edit';
+import { Link } from "react-router-dom";
+
 
 const MainContent = () => {
     const {user} = useContext(UserContext);
     const {profile} = useContext(UserContext)
+
+   const [edit,setEdit]= useState(false)
+
+  
+
     return (
         <div className="bg-white shadow rounded p-4 mb-4">
 
@@ -17,6 +25,10 @@ const MainContent = () => {
                     <h2 className="text-xl font-semibold">Hi, {user.name}</h2>
                     <p className="text-gray-600">buymeacoffee.com/ {user.email}</p>
                 </div>
+                <Link to={'/profileForm'} className="cursor-pointer" onClick={()=>setEdit(true)}>
+                      <EditIcon/>
+                </Link>
+              
             </div>
 
 

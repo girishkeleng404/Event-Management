@@ -3,6 +3,7 @@ import Layout from "../Layout";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../UserContex";
 import { Link } from "react-router-dom";
+import Footer from "../Footer";
 
 
 
@@ -31,10 +32,10 @@ export default function IndexPage(){
         <Layout/>
 
         
-        <div className="bg-slate-100  grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-8 lg:gap-12 px-12">
+        <div className="bg-slate-50  grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-8 lg:gap-12 px-12">
 
         {listingData.length > 0 && listingData.map((item,inx)=>(
-                <div key={item.id||inx} className="flex flex-col  ">
+                <Link to={`/DetailsPage/${item.id}`} key={item.id||inx} className="flex flex-col  ">
                   {/* {item.added_photos.map((photo,photoInx)=>( 
                     <div className="" key={photoInx}>
                       <img className="h-32 w-36" src={`http://localhost:4000/uploads/${photo}`}alt={`Photo of ${item.title}`} />
@@ -55,10 +56,12 @@ export default function IndexPage(){
                  </div>
 
                  
-                </div>
+                </Link>
                
               ))}
         </div>
+
+        <Footer/>
         </>
     )
 }

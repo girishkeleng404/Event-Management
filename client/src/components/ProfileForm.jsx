@@ -119,6 +119,12 @@ export default function ProfileForm() {
                         <textarea placeholder="Write about yourself" value={bio} onChange={(e) => setBio(e.target.value)} className="w-full p-2 rounded-md border border-gray-300" />
                         <label>Website or social link</label>
                         <input type="text" placeholder="https://" value={social} onChange={(e) => setSocial(e.target.value)} className="w-full p-2 rounded-md border border-gray-300" />
+
+                    <label>
+                        College/University
+                    </label>
+                    <input type="text" />
+
                     </div>
                 </div>
                 <button onClick={formSubmit} className="absolute right-12 bottom-8 bg-primary text-white px-3 py-2 rounded-md cursor-pointer">Sign up</button>
