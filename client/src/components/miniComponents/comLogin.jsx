@@ -52,31 +52,31 @@ export default function ComLogin() {
         return <Navigate to={'/'}/>
     }
     return (
-        <div className="flex flex-col gap-4 mx-auto">
+        <div className="flex flex-col gap-4 mx-auto ">
     {error && <div className="text-red-500">{error}</div>}
-            <h1 className='text-2xl font-semibold w-9/12 mx-auto'>Wellcome Back</h1>
-            <div className='w-9/12 mx-auto'>
-                <a href="http://localhost:4000/auth/google"  className="my-4 flex gap-2 items-center border    rounded-xl border-gray-300 p-2 justify-center max-w-96">
+            <h1 className='text-3xl font-semibold mx-auto'>Wellcome Back</h1>
+            <div className=' mx-auto flex justify-between '>
+                <a href="http://localhost:4000/auth/google"  className="my-4 flex gap-2  rounded-xl border-gray-300 p-2 justify-center max-w-96 hover:text-gray-700">
 
                     <GoogleIcon />
                     <h1>Continue with Google</h1>
                 </a>
-                <div className="my-4 flex gap-2 items-center border   rounded-xl border-gray-300 p-2 justify-center max-w-96">
+                <div className="my-4 flex gap-2 items-center  rounded-xl border-gray-300 p-2 justify-center max-w-96">
 
                     <FacebookIcon />
                     <h1>Continue with Facebook</h1>
                 </div>
-                <div className="my-4 flex gap-2 items-center border  rounded-xl border-gray-300 p-2 justify-center max-w-96">
+                {/* <div className="my-4 flex gap-2 items-center  rounded-xl p-2 justify-center max-w-96">
                     <AppleIcon />
 
                     <h1>Continue with Apple</h1>
-                </div>
+                </div> */}
             </div>
 
             <div className='flex gap-2 items-center w-9/12 mx-auto'>
-                <span className='border border-gray-200 flex-1'></span>
+                <span className='border border-gray-400 flex-1'></span>
                 <h1>or</h1>
-                <span className='border border-gray-200 flex-1'></span>
+                <span className='border border-gray-400 flex-1'></span>
             </div>
 
             <div className='mx-auto w-9/12'>

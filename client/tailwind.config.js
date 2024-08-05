@@ -9,6 +9,9 @@ export default {
 
     colors:{
       primary:'#d71920'
+    },
+    height: {
+      '95vh': '93.2vh',
     }
     },
   },

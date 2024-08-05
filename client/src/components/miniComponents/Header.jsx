@@ -36,8 +36,8 @@ const Header = () => {
   return (
     <header className="bg-gray-50 shadow p-4 flex items-center justify-between">
 
-      <Link to={'/'} className="text-lg font-bold ml-4"> <FitbitIcon /> </Link>
-      <Popup trigger={<button className="bg-white py-1 pr-1 pl-2 rounded-full flex gap-2 border border-gray-300 items-center">
+      <Link to={'/'} className="text-lg font-bold ml-12"> <FitbitIcon /> </Link>
+      <Popup trigger={<button className="bg-white py-1 pr-1 pl-2 rounded-full flex gap-2 border border-gray-300 items-center mr-12">
         <MenuIcon />
         <img src={`http://localhost:4000/uploads/${profile.photos}`} alt="profile" className="h-8 w-8 rounded-full" />
       </button>} position={'bottom right'}

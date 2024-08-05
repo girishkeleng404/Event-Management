@@ -16,6 +16,10 @@ export default function ProfileForm() {
     const {id} = useParams();
     const {profile, setProfile} = useContext(UserContext);
     const [redirect, setRedirect] = useState(null);
+    const [redirectPost, setRedirectPost] = useState(null);
+    const [redirectPut, setRedirectPut] = useState(null);
+    const [edit,setEdit]= useState(false)
+    // const [profileDetails, setProfileDetails]= useState([]);
      const navigate = useNavigate();
 
     useEffect(() => {
@@ -28,9 +32,18 @@ export default function ProfileForm() {
         async function fetchData(userId){
             try{
                 const {data} = await axios.get(`/user_profile?id=${userId}`, { withCredentials: true});
-                setUser(data);
-                navigate('/')
+                // setUser(data);
+                setEdit(true);
+                // navigate('/')
                 console.log(data);
+                setName(data.name);
+                setBio(data.bio);
+                setSocial(data.social);
+                setProfilePhoto(data.photos[0]);
+               
+               
+                console.log(user,"User Updated");
+               
             } catch(error){
                 console.log(error);
         }}
@@ -38,6 +51,12 @@ export default function ProfileForm() {
             fetchData(user.id);
         }
   },[user])
+
+
+//  useEffect(()=>{
+//     const {data} = axios.get()
+
+//  },[])
 
 
     useEffect(() => {
@@ -69,8 +88,21 @@ export default function ProfileForm() {
     async function formSubmit() {
       
         try {
-            console.log("Request URL: ", "/profileDetails/" + id);
-            const {data} = await axios.post(`/profileDetails/${user.id}`, { name, bio, social, profilePhoto });
+            
+            let response;
+
+            if (edit) {
+                response = await axios.put(`/profileDetails/${user.id}`, { name, bio, social, profilePhoto });
+                setRedirectPut(true);
+            } else {
+                response = await axios.post(`/profileDetails/${user.id}`, { name, bio, social, profilePhoto });
+                setRedirectPost(true);
+            }
+    
+            const { data } = response;
+         
+            // console.log("Request URL: ", "/profileDetails/" + id);
+            // const {data} = await axios.post(`/profileDetails/${user.id}`, { name, bio, social, profilePhoto });
             // console.log(id);
             setProfile(data);
             // console.log(JSON.stringify(data))
@@ -80,21 +112,28 @@ export default function ProfileForm() {
             // navigate('/');
             // console.log(data+"Profile Updated");
              
-            setRedirect(true);
+          
+
+
+
         } catch (error) {
             console.log(error+"Profile Update Failed");
         }
 
     }
-    if (redirect) {
+    if (redirectPost) {
 
         return <Navigate to={'/login'}/>
+    }
+    if(redirectPut){
+        return <Navigate to='/' />;
     }
 
 
     // setName(user.name);
     return (
-        <div className="relative bg-gray-400 sm:p-8  max-h-screen overflow-hidden">
+        <div className="relative bg-slate-200 sm:p-8  max-h-screen overflow-hidden">
+            
             <Link to={'/'} className="absolute top-4 left-4 sm:top-8 sm:left-8">
                 <FitbitIcon style={{ fontSize: '1.5rem' }} />
             </Link>
@@ -112,7 +151,7 @@ export default function ProfileForm() {
                     <div className="w-full sm:w-6/12">
                         <label>Name</label>
                           {!gRedirect && user && (
-                              <input type="text" placeholder={user.name} onChange={(e) => setName(e.target.value)} className="w-full p-2 rounded-md border border-gray-300" />
+                              <input type="text" placeholder={user.name} value={name} onChange={(e) => setName(e.target.value)}  className="w-full p-2 rounded-md border border-gray-300" />
                           )}
                       
                         <label>About</label>
@@ -127,7 +166,7 @@ export default function ProfileForm() {
 
                     </div>
                 </div>
-                <button onClick={formSubmit} className="absolute right-12 bottom-8 bg-primary text-white px-3 py-2 rounded-md cursor-pointer">Sign up</button>
+                <button onClick={formSubmit} className="absolute right-12 bottom-8 bg-primary text-white px-3 py-2 rounded-md cursor-pointer">Continue</button>
             </div>
 
             

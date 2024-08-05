@@ -23,7 +23,7 @@ const MainContent = () => {
                 </div>
                 <div>
                     <h2 className="text-xl font-semibold">Hi, {user.name}</h2>
-                    <p className="text-gray-600">buymeacoffee.com/ {user.email}</p>
+                    <p className="text-gray-600">air.com/ {user.email}</p>
                 </div>
                 <Link to={'/profileForm'} className="cursor-pointer" onClick={()=>setEdit(true)}>
                       <EditIcon/>

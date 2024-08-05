@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
+import DeleteIcon from '@mui/icons-material/Delete';
+import StarIcon from '@mui/icons-material/Star';
 
 export default function PhotosUploader({ addedPhotos, onChange }) {
 
@@ -45,6 +47,18 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
         })
     }
 
+
+    function removePhoto(fileName, ev){
+        ev.preventDefault();
+        onChange([...addedPhotos.filter(photo=> photo!== fileName)])
+
+    }
+    function mainPhoto(fileName, ev){
+        ev.preventDefault();
+        onChange([fileName, ...addedPhotos.filter(photo => photo !== fileName)])
+
+    }
+
     return (
         <div>
 
@@ -59,7 +73,23 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
 
                 {addedPhotos? addedPhotos.map((link, inx) => {
                     return(
-                        <div key={inx}>
+                        <div key={inx} className="relative">
+                            <button onClick={(ev)=>removePhoto(link,ev)}>
+                                    <DeleteIcon className="absolute text-white bottom-1 right-1"/>
+                            </button>
+                   
+
+                       <button onClick={(ev)=>mainPhoto(link,ev)}>
+                        {link === addedPhotos[0]&& (
+                          <StarIcon  className="absolute text-blue-400 bottom-1 left-1"/>
+                       )}
+                       {link !== addedPhotos[0]&& (
+                        <StarIcon className="absolute text-white bottom-1 left-1"/>
+                       )}
+                       </button>
+                       
+                      
+                       
                         <img
                             className="rounded-xl w-full h-48 object-cover"
                             src={`http://localhost:4000/uploads/${link}`}

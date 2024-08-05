@@ -31,7 +31,7 @@ const Footer = () => {
           </ul>
         </div>
         <div>
-          <h2 className="text-lg font-bold mb-4">Airbnb</h2>
+          <h2 className="text-lg font-bold mb-4">Air</h2>
           <ul>
             <li><a href="#" className="text-gray-600 hover:underline">Newsroom</a></li>
             <li><a href="#" className="text-gray-600 hover:underline">New features</a></li>

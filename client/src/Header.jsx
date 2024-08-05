@@ -33,7 +33,7 @@ export default function Header() {
         }
     }
     return (
-        <div className="flex align-center justify-around my-4">
+        <div className="flex align-center justify-around py-4 bg-gray-100">
             
             <div className="flex gap-8 items-center">
                 <Link to={'/'} className='flex items-center gap-2'>

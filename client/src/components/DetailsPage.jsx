@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Header from "../Header";
 import { UserContext } from "../UserContex";
 import { useContext, useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Perks from "../Perks";
 import PerksDis from "../PerksDis";
 import Footer from "../Footer";
+import BookingPage from "./BookingPage";
 
 
 export default function DetailsPage() {
@@ -16,6 +17,7 @@ export default function DetailsPage() {
     const [listingData, setListingData] = useState([])
     const [iid, setIid] = useState()
     const [profile, setProfile] = useState([])
+    const [book, setBook] = useState(false)
 
 
     useEffect(() => {
@@ -54,10 +56,17 @@ export default function DetailsPage() {
     const checkInDate = (listingData.check_in ? listingData.check_in.split('T')[0] : null)
     const addedDate = (profile.created_at ? profile.created_at.split('T')[0] : null)
 
+  if(book){
+    return(
+        <div>
+            {/* <Header /> */}
+            <BookingPage onChange={setBook} data={listingData} eventDate={eventDate} checkInDate={checkInDate} />
+        </div>
+    )
+  }
+
 
     return (
-
-
 
 
         <div className="overflow-x-hidden h-screen">
@@ -87,7 +96,7 @@ export default function DetailsPage() {
                                 <div>
                                     <h1 className="text-3xl my-4">Know your host</h1>
                                 </div>
-                                <div className=" py-2 px-6 backdrop-blur bg-slate-100 rounded-xl shadow-lg">
+                                <div className=" py-2 px-6 backdrop-blur bg-slate-100 rounded-xl shadow-lg ">
 
                                     <div className="flex items-center justify-between ">
 
@@ -95,7 +104,7 @@ export default function DetailsPage() {
                                         <div className="flex items-center gap-4 my-4">
                                             <img src={`http://localhost:4000/uploads/${profile.photos}`} alt="" className="h-16 w-16 rounded-full" />
 
-                                            <h1 className="text-xl align-baseline">{profile.name}</h1>
+                                            <Link to={`/UserProfile/${listingData.user_id}`} className="text-xl align-baseline cursor-pointer capitalize">{profile.name}</Link>
                                         </div>
                                         <div>
                                             <h1> {addedDate} </h1>
@@ -139,7 +148,7 @@ export default function DetailsPage() {
 
 
                             {/* <button className="bg-primary py-2 px-4 my-4 rounded-lg mr-4">Host info</button> */}
-                            <button className=" py-2 px-8 my-4 rounded-lg bg-primary">Reserve</button>
+                            <button onClick={()=> setBook(true)} className="py-2 px-8 my-4 rounded-lg bg-primary">Reserve</button>
                         </div>
                     </div>
 
