@@ -56,14 +56,14 @@ export default function DetailsPage() {
     const checkInDate = (listingData.check_in ? listingData.check_in.split('T')[0] : null)
     const addedDate = (profile.created_at ? profile.created_at.split('T')[0] : null)
 
-  if(book){
-    return(
-        <div>
-            {/* <Header /> */}
-            <BookingPage onChange={setBook} data={listingData} eventDate={eventDate} checkInDate={checkInDate} />
-        </div>
-    )
-  }
+    if (book) {
+        return (
+            <div>
+                {/* <Header /> */}
+                <BookingPage onChange={setBook} data={listingData} eventDate={eventDate} checkInDate={checkInDate} />
+            </div>
+        )
+    }
 
 
     return (
@@ -148,7 +148,15 @@ export default function DetailsPage() {
 
 
                             {/* <button className="bg-primary py-2 px-4 my-4 rounded-lg mr-4">Host info</button> */}
-                            <button onClick={()=> setBook(true)} className="py-2 px-8 my-4 rounded-lg bg-primary">Reserve</button>
+                            <div className="grid grid-cols-2 items-center gap-12">
+                                <button onClick={() => setBook(true)} className="py-2 px-8 my-4 rounded-lg bg-primary">Reserve</button>
+                                <div className="flex gap-4 text-xl">
+                                    <span>Price:</span>
+                                    <div className="text-xl"> ₹ {listingData.price}  </div>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
 

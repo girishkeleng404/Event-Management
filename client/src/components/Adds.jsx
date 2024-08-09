@@ -35,7 +35,7 @@ fetchData();
       <Header />
       <div className="flex flex-1">
         <Sidebar />
-        <main className=" mx-auto p-4 flex flex-col bg-slate-200">
+        <main className=" mx-auto w-11/12 p-4 flex flex-col bg-slate-200">
             <div className="mx-auto">
               <Link
             className=" text-center items-center inline-flex gap-1 bg-primary text-white py-2 px-6 rounded-full  my-8 "

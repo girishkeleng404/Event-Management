@@ -21,6 +21,8 @@ import ProtectedRoute from './components/miniComponents/ProtectedRoute';
 import DetailsPage from './components/DetailsPage';
 import Footer from './Footer';
 import ProfileHome from './components/displayProfile/ProfileHome';
+import OrderDisplay from './components/miniComponents/orderDispay';
+import OrderDetails from './components/orderDetails';
 // import ProtectedRoute from './components/miniComponents/ProtectedRoute';
 
 function App() {
@@ -52,6 +54,7 @@ function App() {
      <Route path='Dashboard/Adds/:id' element={<NewAds/>}/>
      <Route path='/DetailsPage/:id' element={<DetailsPage/>}/>
      <Route path='UserProfile/:id' element={<ProfileHome/>}/>
+     <Route path='/orderDetails/:id' element={<OrderDetails/>}/>
      
     
     </Routes>

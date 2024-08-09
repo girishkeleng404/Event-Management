@@ -16,7 +16,7 @@ export default function Header() {
 
     const { user } = useContext(UserContext)
     const { profile } = useContext(UserContext)
-    console.log(user)
+    // console.log(user)
 
 
 

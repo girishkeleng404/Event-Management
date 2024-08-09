@@ -19,6 +19,9 @@ import OpenIDConnectStrategy from "passport-openidconnect";
 import helmet from "helmet";
 import jwt from "jsonwebtoken";
 import env from "dotenv"
+import razorpay from "razorpay";
+import Razorpay from "razorpay";
+import crypto from "crypto";
 
 
 env.config();
@@ -383,10 +386,10 @@ app.post('/uploads', upload.array('photos', 100), async (req, res) => {
 
 app.post('/profileDetails/:id', async (req, res) => {
     const { id } = req.params;
-    const { name, bio, social, profilePhoto } = req.body;
+    const { name, bio, social, profilePhoto,phone,email } = req.body;
     try {
         const profilePhotoArray = [profilePhoto];
-        const result = await db.query("INSERT INTO user_profile (user_id, name, bio, social_media_link, photos) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, name, bio, social, profilePhotoArray]);
+        const result = await db.query("INSERT INTO user_profile (user_id, name, bio, social_media_link, photos,phone,email) VALUES ($1, $2, $3, $4, $5,$6,$7) RETURNING *", [id, name, bio, social, profilePhotoArray,phone,email]);
        
         // Assuming the user's session is already established and you want to update or save something specific after this operation
         req.session.userProfile = result.rows[0]; // Example: Save the user profile in the session
@@ -409,7 +412,7 @@ app.post('/profileDetails/:id', async (req, res) => {
 
 app.put('/profileDetails/:id', async (req, res) => {
 const {id}=req.params;
-const {name, bio, social, profilePhoto} = req.body;
+const {name, bio, social, profilePhoto,phone,email} = req.body;
 
 console.log("Received ID:", id);
     console.log("Received name:", name);
@@ -419,7 +422,7 @@ console.log("Received ID:", id);
 try {
     const profilePhotoArray = [profilePhoto];
 
-    const result = await db.query("UPDATE user_profile SET name = $1, bio = $2, social_media_link = $3, photos = $4 WHERE user_id = $5 RETURNING *", [name, bio, social, profilePhotoArray,id]);
+    const result = await db.query("UPDATE user_profile SET name = $1, bio = $2, social_media_link = $3, photos = $4 , phone = $5, email = $6 WHERE user_id = $7 RETURNING *", [name, bio, social, profilePhotoArray,phone,email,id]);
 
     req.session.userProfile = result.rows[0]; // Example: Save the user profile in the session
 
@@ -542,9 +545,153 @@ app.put('/listing/:id', async(req,res)=>{
 })
 
 
+// -------------xxxxxxxxxxxxx------------------
 
 
+app.post('/orders',async(req,res)=>{
+    const razorpay = new Razorpay({key_id:process.env.RAZORPAY_KEY_ID, key_secret:process.env.RAZORPAY_KEY_SECRET});
+
+
+    const options = req.body;
+
+    try {
+        const response = await razorpay.orders.create(options);
+        // res.json({
+        //     // order_id:response.id,
+        //     // currency:response.currency,
+        //     // amount:response.amount
+            
+        // })
+        console.log(response);
+        res.json(response);
+    } catch (error) {
+     res.status(500).json({message:"Error creating order"})  
+    }
+})
+
+
+app.get("/payment/:paymentId", async(req,res)=>{
+    const {paymentId} = req.params;
+    const razorpay = new Razorpay({key_id:process.env.RAZORPAY_KEY_ID, key_secret:process.env.RAZORPAY_KEY_SECRET});
+
+
+    try {
+        const payment = await razorpay.payments.fetch(paymentId);
+        
+        if(!payment){
+            return res.status(404).json({message:"Payment not found"});
+        } 
+        res.json({
+            status:payment.status,
+            method:payment.method,
+            amount:payment.amount,
+            currency:payment.currency,
+        })
+
+
+    } catch (error) {
+        res.json({message:"Error fetching payment"})
+    }
+
+})
+
+app.post("/order/validate", async(req,res)=>{
+  const {razorpay_order_id,razorpay_payment_id,razorpay_signature} = req.body;
+  const sha = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET);
+  sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+  const digest = sha.digest("hex");
+  if(digest !== razorpay_signature){
+    return res.status(400).json({message:"Invalid signature"});
+  }
+  res.json({
+        message:"Payment successful",
+        orderId:razorpay_order_id,
+        paymentId:razorpay_payment_id
+  })
+})
+
+
+// ----------------xxxxxxxxxx----------------
+
+app.post('/booking/:id', async (req, res) => {
+    const { user_id, name, guests, email, phone, note, paymentId, orderId, signature } = req.body;
+    const { id } = req.params;
+
+    try {
+        // Ensure these fields are either valid strings or null
+        const sanitizedOrderId = orderId || null;
+        const sanitizedPaymentId = paymentId || null;
+        const sanitizedSignature = signature || null;
+        console.log(paymentId, orderId, signature )
+
+        const result = await db.query(
+            "INSERT INTO booking (name, guest_num, email, phone_no, note, user_id, place_id, razorpay_order_id, razorpay_payment_id, razorpay_signature) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
+            [name, guests, email, phone, note, user_id, id, sanitizedOrderId, sanitizedPaymentId, sanitizedSignature]
+        );
+
+        // Check if booking was successfully inserted
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
+
+        // Return the newly inserted booking data
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error("Error inserting booking:", error);
+        res.status(500).json({ message: "Error inserting booking" });
+    }
+});
+
+
+// -------------xxxxxxxxxxxx------------
+
+app.get("/orders/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const response = await db.query("SELECT * FROM booking WHERE user_id = $1", [id]);
+        if (response.rows.length > 0) {
+            res.json(response.rows);
+        } else {
+            res.status(404).json({ message: "No orders found for this user" });
+        }
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ message: "An error occurred while fetching orders",error });
+    }
+});
+
+
+app.get("/orders/:user_id/:place_id", async (req, res) => {
+    const { user_id, place_id } = req.params;
+    try {
+        const response = await db.query(
+            "SELECT * FROM booking WHERE user_id = $1 AND place_id = $2",
+            [user_id, place_id]
+        );
+        if (response.rows.length > 0) {
+            res.json(response.rows);
+        } else {
+            res.status(404).json({ message: "No orders found for this user and place" });
+        }
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ message: "An error occurred while fetching orders", error });
+    }
+});
+
+
+app.get('/booking_details/:place_id', async(req,res)=>{
+    const {place_id} = req.params;
+    try {
+        const result = await db.query("SELECT * FROM listings WHERE id = $1 ORDER BY id DESC", [place_id]);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error)
+        res.send(error);
+    }
+}
+)
 
 app.listen(port, () => {
-    console.log("Server is running on port 5000");
+    console.log("Server is running on port 4000");
 })

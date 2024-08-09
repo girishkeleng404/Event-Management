@@ -3,6 +3,7 @@ import React from 'react';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import XIcon from '@mui/icons-material/X';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -22,7 +23,7 @@ const Footer = () => {
         <div>
           <h2 className="text-lg font-bold mb-4">Hosting</h2>
           <ul>
-            <li><a href="#" className="text-gray-600 hover:underline">List your home</a></li>
+            <li><Link to={`/Dashboard/Adds`}  className="text-gray-600 hover:underline">List your home</Link></li>
             <li><a href="#" className="text-gray-600 hover:underline">AirCover for Hosts</a></li>
             <li><a href="#" className="text-gray-600 hover:underline">Hosting resources</a></li>
             <li><a href="#" className="text-gray-600 hover:underline">Community forum</a></li>
