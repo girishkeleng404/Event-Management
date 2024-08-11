@@ -44,7 +44,7 @@ const Footer = () => {
       </div>
       <div className="border-t mt-8 pt-8">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center px-4">
-          <div className="text-sm text-gray-600">&copy; 2024 Air, Inc. · Privacy · Terms · Sitemap · Company details</div>
+          <div className="text-sm text-gray-600">&copy; {new Date().getFullYear()} Air, Inc. · Privacy · Terms · Sitemap · Company details</div>
           <div className="flex space-x-4 mt-4 sm:mt-0">
           
             <FacebookIcon/>

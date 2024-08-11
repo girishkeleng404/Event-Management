@@ -16,7 +16,8 @@ export default function Adds() {
    const fetchData = async()=>{
 
       try {
-    await axios.get('/listing', { withCredentials: true }).then(response=>{
+        let {id}= user;
+    await axios.get(`/listingPost/${id}`, { withCredentials: true }).then(response=>{
       console.log(response.data)
       setListingData(response.data)
     

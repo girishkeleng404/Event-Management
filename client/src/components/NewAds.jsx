@@ -103,7 +103,8 @@ export default function NewAds() {
                 console.log(err)
             })
          } else{
-            axios.post(`/listing`, { ...listingData }).then(response => {
+            const {id} = user;
+            axios.post(`/listingPost/${id}`, { ...listingData }).then(response => {
                 console.log(response)
                 navigate('/Dashboard/Adds');
     

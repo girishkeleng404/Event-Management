@@ -174,7 +174,10 @@ export default function ProfileForm() {
                         <label> Phone Number:  </label>
                         <input type="text" value={phone} onChange={(e)=>setPhone(e.target.value)}/>
                         <label> Email:  </label>
-                        <input type="text" placeholder={user.email} value={email} onChange={(e)=>setEmail(e.target.value)} />
+                        {user && user.email && (
+                            <input type="text" placeholder={user.email} value={email} onChange={(e)=>setEmail(e.target.value)} />
+                        )}
+                        
 
                     </div>
                 </div>

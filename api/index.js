@@ -485,8 +485,9 @@ app.get('/user_detail/:iid', async (req, res) => {
 })
 
 
-app.post('/listing', async(req,res)=>{
-    const id= req.user.id;
+app.post('/listing/:id', async(req,res)=>{
+    // const id= req.user.id;
+    const {id} = req.params;
     const {title, type, address, addedPhotos, description, price, isSameDay, eventDate, checkIn, checkOut, time, guests, perks} = req.body;
 
     try {
@@ -499,8 +500,9 @@ app.post('/listing', async(req,res)=>{
         res.send(error);
     }
 })
-app.get('/listing', async(req,res)=>{
-    const id= req.user.id;
+app.get('/listingPost/:id', async(req,res)=>{
+    // const id= req.user.id;
+    const {id} = req.params;
     try {
         const result = await db.query("SELECT * FROM listings WHERE user_id = $1 ORDER BY id ASC", [id]);
         res.json(result.rows);
