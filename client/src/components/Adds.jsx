@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import Header from "./miniComponents/Header"
+import Header from "./miniComponents/HeaderSm"
 import Sidebar from "./miniComponents/Sidebar"
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from "react";

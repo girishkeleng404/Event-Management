@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Header from "./miniComponents/Header";
+import Header from "./miniComponents/HeaderSm";
 import PhotosUploader from "../PhotosUploader";
 import Perks from "../Perks";
 import axios from "axios";

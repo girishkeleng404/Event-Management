@@ -29,9 +29,9 @@ export default function IndexPage(){
     
     return(
         <>
-        <Layout/>
+        <Layout />
 
-        <div className="bg-slate-50 ">
+        <div className="bg-slate-50 py-8">
 
 
        

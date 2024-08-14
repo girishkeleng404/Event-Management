@@ -1,4 +1,4 @@
-import Header from "./miniComponents/Header";
+import Header from "./miniComponents/HeaderSm";
 import Sidebar from "./miniComponents/Sidebar";
 
  

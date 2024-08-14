@@ -23,6 +23,9 @@ import Footer from './Footer';
 import ProfileHome from './components/displayProfile/ProfileHome';
 import OrderDisplay from './components/miniComponents/orderDispay';
 import OrderDetails from './components/orderDetails';
+import SearchPlace from './components/SearchPlace';
+ 
+ 
 // import ProtectedRoute from './components/miniComponents/ProtectedRoute';
 
 function App() {
@@ -55,6 +58,7 @@ function App() {
      <Route path='/DetailsPage/:id' element={<DetailsPage/>}/>
      <Route path='UserProfile/:id' element={<ProfileHome/>}/>
      <Route path='/orderDetails/:id' element={<OrderDetails/>}/>
+     <Route path='/search/:searchText' element={<SearchPlace/>}/>
      
     
     </Routes>

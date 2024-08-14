@@ -17,23 +17,29 @@ export default function Register() {
     const [redirect, setRedirect] = useState(false)
     const {user}= useContext(UserContext)
     const {setUser}= useContext(UserContext)
+    const [otpVerified, setOtpVerified] = useState(false)
     const navigate = useNavigate(); 
 
     async function handleClick() {
         // e.preventDefault();
-        console.log(name, email, password);
-        try {
-           const {data} = await axios.post('/register', { name, email, password });
-            setUser(data);
-            console.log(data+"register chekc");
-            console.log(data.id + "register chekc")
-             
-            return data;
-             
-        } catch (error) {
-            console.error("Registration failed:", error);
-            
+        if(otpVerified){
+            console.log(name, email, password);
+            try {
+               const {data} = await axios.post('/register', { name, email, password });
+                setUser(data);
+                console.log(data+"register chekc");
+                console.log(data.id + "register chekc")
+                 
+                return data;
+                 
+            } catch (error) {
+                console.error("Registration failed:", error);
+                
+            }
+        } else{
+            console.log('Please verify your email first.');
         }
+        
     }
 
     async function handleButtonClick() {
@@ -82,7 +88,7 @@ if(redirect){
                      <UserName name={name} setName={setName} setShow={setShow}/>
                   )}
                    { show && name && (
-                       <SignUp name={name} setEmail={setEmail} setPassword={setPassword}/>
+                       <SignUp name={name} email={email} password={password} setEmail={setEmail} setPassword={setPassword} setOtpVerified={setOtpVerified}/>
                    )}
                   
                 </div>

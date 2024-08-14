@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import Header from "./miniComponents/Header";
+import Header from "./miniComponents/HeaderSm";
 import MainContent from "./miniComponents/MainContent";
 import Sidebar from "./miniComponents/Sidebar";
  import { UserContext } from "../UserContex";

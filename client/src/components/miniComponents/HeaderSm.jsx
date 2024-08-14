@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup'
 
-const Header = () => {
+const HeaderSm = () => {
 
 
 
@@ -71,7 +71,7 @@ const Header = () => {
 
 }
 
-export default Header;
+export default HeaderSm;
 
 
 

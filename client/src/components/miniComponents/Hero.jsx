@@ -4,6 +4,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Hero2 from "./Hero2";
 import Hero3 from "./Hero3";
 import Footer from "../../Footer";
+import { Link } from "react-router-dom";
 
 
 
@@ -54,8 +55,8 @@ export default function Hero({ id }) {
 
                 <div className="relative z-10 text-white flex flex-col pt-12 pl-12 backdrop-blur-xl bg-white/30  h-screen " >
                     <div className="flex flex-col items-start gap-8">
-                        <h1 className=" text-2xl lg:text-7xl capitalize"> {listingData.title} </h1>
-                        <h2 className="hidden md:block text-md "> {listingData.description} </h2>
+                        <Link to={`/DetailsPage/${listingData.id}`} className=" text-2xl lg:text-7xl capitalize cursor-pointer"> {listingData.title} </Link>
+                        <p  className="hidden md:block text-md "> {listingData.description} </p>
                         <div>
                             {/* <h1>Price: {listingData.price}</h1> */}
                             <div className="flex items-center gap-8 my-4">

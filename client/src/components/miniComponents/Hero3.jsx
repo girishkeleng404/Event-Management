@@ -31,7 +31,7 @@ export default function Hero3({ id, iid }) {
 
                 {/* <Link to={`/UserProfile/${listingData.user_id}`} className="text-xl align-baseline cursor-pointer capitalize">{profile.name}</Link> */}
             </div>
-            <p className="text-lg">Name : {profile.name} </p>
+            <Link to={`/UserProfile/${profile.user_id}`} className="text-lg">Name : {profile.name} </Link>
             <p className="text-lg" >email : {profile.email} </p>
             <p className="text-lg" >Social : {profile.social_media_link}</p>
             <p className="text-lg" >Phone: {profile.phone} </p>

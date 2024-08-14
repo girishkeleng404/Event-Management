@@ -1,4 +1,4 @@
-import Header from "./miniComponents/Header";
+import Header from "./miniComponents/HeaderSm";
 import { UserContext } from "../UserContex";
 import { useContext, useEffect, useState } from "react";
 import DetailsPage from "./DetailsPage";

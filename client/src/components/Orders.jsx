@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import Header from "./miniComponents/Header";
+import Header from "./miniComponents/HeaderSm";
 import Sidebar from "./miniComponents/Sidebar";
 
 import { UserContext } from "../UserContex";
