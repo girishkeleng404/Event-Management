@@ -14,25 +14,25 @@ const HeaderSm = () => {
 
   const { user, profile, ready } = useContext(UserContext);
 
-   const [triggerEvent, setTriggerEvent] = useState('hover');
-   
+  const [triggerEvent, setTriggerEvent] = useState('hover');
 
- 
- useEffect(()=>{
-  const updateTriggerEvent=()=>{
-    const newTriggerEvent = window.innerWidth<768? 'click':'hover';
-    setTriggerEvent(newTriggerEvent);
-  };
 
-  updateTriggerEvent();
-  window.addEventListener('resize', updateTriggerEvent)
 
-  return ()=> window.removeEventListener('resize', updateTriggerEvent)
- },[])
+  useEffect(() => {
+    const updateTriggerEvent = () => {
+      const newTriggerEvent = window.innerWidth < 768 ? 'click' : 'hover';
+      setTriggerEvent(newTriggerEvent);
+    };
 
- if (!ready) {
-  return <div>Loading...</div>;
-}
+    updateTriggerEvent();
+    window.addEventListener('resize', updateTriggerEvent)
+
+    return () => window.removeEventListener('resize', updateTriggerEvent)
+  }, [])
+
+  if (!ready) {
+    return <div>Loading...</div>;
+  }
   return (
     <header className="bg-gray-50 shadow p-4 flex items-center justify-between">
 
@@ -45,7 +45,7 @@ const HeaderSm = () => {
         closeOnDocumentClick
         mouseLeaveDelay={200}
         mouseEnterDelay={300}
-        contentStyle={{ padding: '8px 10px', border: 'none', background: 'gray' , borderRadius: 5, rowGap: 4, width:'10rem',  }}  >
+        contentStyle={{ padding: '8px 10px', border: 'none', background: 'gray', borderRadius: 5, rowGap: 4, width: '10rem', }}  >
 
         <div className='py-2 link-hover-effect'>
           <Link to={'/Dashboard'}>Home</Link>
@@ -56,12 +56,14 @@ const HeaderSm = () => {
         <div className='py-2 link-hover-effect'>
           <Link to={'/Dashboard/Adds'}>Your Adds</Link>
         </div>
+        <div className='py-2 link-hover-effect bg-'>
+          <Link to={'/Dashboard/OrderInbox'}>Order Inbox</Link>
+        </div>
+
         <div className='py-2 link-hover-effect'>
           <Link to={'/Dashboard/Cards'}> Cards</Link>
         </div>
-        <div className='py-2 link-hover-effect bg-'>
-          <Link to={'/Dashboard/Address'}>Address</Link>
-        </div>
+
 
 
       </Popup>

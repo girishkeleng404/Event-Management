@@ -13,7 +13,7 @@ import Order from './components/Orders';
 import Adds from './components/Adds';
  
 import Cards from './components/Cards';
-import Address from './components/Address';
+ 
 import NewAds from './components/NewAds';
 // import Profile from './components/miniComponents/ProtectedRoute';
 import ComLogin from './components/miniComponents/comLogin';
@@ -24,6 +24,8 @@ import ProfileHome from './components/displayProfile/ProfileHome';
 import OrderDisplay from './components/miniComponents/orderDispay';
 import OrderDetails from './components/orderDetails';
 import SearchPlace from './components/SearchPlace';
+ 
+import OrderInbox from './components/OrderInbox';
  
  
 // import ProtectedRoute from './components/miniComponents/ProtectedRoute';
@@ -50,7 +52,7 @@ function App() {
      <Route path='/Dashboard/Orders' element={<Order/>}/>
      <Route path='/Dashboard/Adds' element={<Adds/>}/>
      <Route path='/Dashboard/Cards' element={<Cards/>}/>
-     <Route path='/Dashboard/Address' element={<Address/>}/>
+     <Route path='/Dashboard/orderInbox' element={<OrderInbox/>} />
      <Route path='/Dashboard/Adds/new' element={<NewAds/>}/>
 
      <Route path='/auth/google/callback' element={<ProtectedRoute/>}/>

@@ -27,10 +27,17 @@ const Sidebar = () => {
         <Link to={'/Dashboard'} className={linkClasses("Home")}><a href="#" className="block py-2 px-4 rounded">Home</a></Link>
         <Link to={'/Dashboard/Orders'} className={linkClasses("Orders")}><a href="#" className="block py-2 px-4">Your Orders</a></Link>
         <Link to={'/Dashboard/Adds'} className={linkClasses("Adds")}><a href="#" className="block py-2 px-4">Your Adds</a></Link>
-        <Link to={'/Dashboard/Cards'} className={linkClasses("Cards")}><a href="#" className="block py-2 px-4">Cards</a></Link>
-        <Link  to={'/Dashboard/Address'}  className={linkClasses("Address")}><a href="#" className="block py-2 px-4">Address</a></Link>
 
-        
+        <Link to={'/Dashboard/orderInbox'} className={linkClasses("orderInbox")}><a href="#" className="block py-2 px-4">Order Inbox</a>
+        </Link>
+
+        <Link to={'/Dashboard/Cards'
+        } className={linkClasses("Cards")}><a href="#" className="block py-2 px-4">Cards</a>
+        </Link>
+
+
+
+
       </ul>
     </aside>
   );
