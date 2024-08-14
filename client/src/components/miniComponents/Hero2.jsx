@@ -18,8 +18,9 @@ export default function Hero2({ place_id, hostId }) {
     const [guests, setGuests] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const [refreshData, setRefreshData] = useState(false);
 
-    const navigate = useNavigate();
+  
 
     useEffect(() => {
         const fetchOrder = async () => {
@@ -54,7 +55,7 @@ export default function Hero2({ place_id, hostId }) {
         }
 
         fetchOrder();
-    }, [user, place_id]);
+    }, [user, place_id,refreshData]);
 
     const toggleEditPermission = () => {
         setEditPermission(prevState => !prevState);
@@ -79,7 +80,8 @@ export default function Hero2({ place_id, hostId }) {
             const data = await response.json();
             setOrderData(data);
              setEditPermission(false);
-             window.location.reload();
+             setRefreshData(true);
+            //  window.location.reload();
          } catch (error) {
             console.log(error);
          }
