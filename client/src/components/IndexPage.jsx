@@ -35,7 +35,7 @@ export default function IndexPage(){
 
 
        
-        <div className="w-11/12 grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-8 lg:gap-12 px-12 m-auto">
+        <div className="w-11/12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 lg:gap-12 lg:px-12 md:px-10 m-auto">
 
         {listingData.length > 0 && listingData.map((item,inx)=>(
                 <Link to={`/DetailsPage/${item.id}`} key={item.id||inx} className="flex flex-col ">
