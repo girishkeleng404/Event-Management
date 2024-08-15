@@ -128,7 +128,7 @@ export default function NewAds() {
             <div className=" w-10/12 lg:w-6/12 mx-auto  ">
                 {preInput("Title", "Title for your place like a name of you place")}
 
-                <input type="text" className="" placeholder="title" value={title} onChange={ev => setTitle(ev.target.value)} />
+                <input type="text" className="" placeholder="try to keep it short" value={title} onChange={ev => setTitle(ev.target.value)} />
 
                 {preInput("Type", "Villa, apartment, house,etc")}
                 <input type="text" className=" " placeholder="Apartment" value={type} onChange={ev => { setType(ev.target.value) }} />

@@ -577,6 +577,7 @@ app.get('/user_detail/:iid', async (req, res) => {
     }
 })
 
+// ------------------x-----------
 
 app.post('/listingPost/:id', async (req, res) => {
     // const id= req.user.id;
@@ -672,6 +673,48 @@ app.get('/listingsIndex', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
+
+ 
+
+app.get("/searchPlace/:searchText", async (req, res) => {
+   
+    const { searchText } = req.params;
+    const { page = 1, limit = 6 } = req.query;
+    
+    try {
+        console.log(searchText);
+         
+        const result = await db.query(
+            `SELECT * FROM listings 
+             WHERE to_tsvector(title || ' ' || description || ' ' || address) @@ to_tsquery($1) 
+             ORDER BY id DESC LIMIT $2 OFFSET $3`,
+            [searchText.replace(/ /g, ' & '),limit, (page - 1) * limit]
+        );
+        const countQuery = `SELECT COUNT(*) FROM listings`;
+        const { rows: countRows } = await db.query(countQuery);
+        const totalListings = parseInt(countRows[0].count, 10);
+        const totalPages = Math.ceil(totalListings / limit);
+
+        res.json({
+            listings: result.rows,
+            totalPages,
+            currentPage: parseInt(page, 10),
+        });
+
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while searching for listings.");
+    }
+
+})
+
+
+
+
+
 
 // -------------xxxxxxxxxxxxx------------------
 
@@ -839,25 +882,7 @@ app.get('/booking_details/:place_id', async (req, res) => {
 )
 
 
-app.get("/searchPlace/:searchText", async (req, res) => {
-    // const searchText = req.query.searchText ? req.query.searchText.toLowerCase() : '';
-    const { searchText } = req.params;
-    try {
-        console.log(searchText);
-        // const searchTerms = searchText.toLowerCase().split(' ').map(term => `%${term}%`);
-        const result = await db.query(
-            `SELECT * FROM listings 
-             WHERE to_tsvector(title || ' ' || description || ' ' || address) @@ to_tsquery($1) 
-             ORDER BY id DESC`,
-            [searchText.replace(/ /g, ' & ')]
-        );
-        res.json(result.rows);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("An error occurred while searching for listings.");
-    }
 
-})
 
 
 // ------------xxxxxxxxxx--------------

@@ -44,9 +44,9 @@ export default function IndexPage() {
           {listingData.length > 0 && listingData.map((item, inx) => (
             <Link to={`/DetailsPage/${item.id}`} key={item.id || inx} className="flex flex-col">
               <div className="m-auto flex flex-col">
-                <div>
+                <div className="">
                   {item.added_photos && (
-                    <img className="w-10/12 aspect-square rounded-lg" src={`http://localhost:4000/uploads/${item.added_photos[0]}`} alt={`Photo of ${item.title}`} />
+                    <img className="w-10/12 aspect-square rounded-lg object-cover" src={`http://localhost:4000/uploads/${item.added_photos[0]}`} alt={`Photo of ${item.title}`} />
                   )}
                 </div>
                 <div className="text-gray-800">
