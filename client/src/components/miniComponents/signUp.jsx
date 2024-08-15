@@ -16,7 +16,7 @@ export default function SignUp({ name, setEmail, setPassword, email, password, s
 
     const fetchOTP = async () => {
         try {
-            await axios.post('/otpSend', { email, isVarified }).then((response) => {
+            await axios.post('/otpSend', { email, isVarified,name }).then((response) => {
                 console.log(response)
             })
         } catch (error) {

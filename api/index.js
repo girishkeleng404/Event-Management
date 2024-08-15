@@ -296,7 +296,7 @@ function generateOTP() {
 
 app.post('/otpSend', async (req, res) => {
     // const { id } = req.params;
-    const { email, isVarified } = req.body;
+    const { email, isVarified,name } = req.body;
     const otp = generateOTP();
     try {
 
@@ -311,8 +311,15 @@ app.post('/otpSend', async (req, res) => {
         var mailOptions = {
             from: 'girishkeleng30@gmail.com',
             to: `${email}`,
-            subject: 'Sending Email using Node.js',
-            text: `Your OTP is ${otp} expires in 5 minutes`
+            subject: 'Your One-Time Password (OTP) for Air',
+            text: `Dear ${name},
+
+Your One-Time Password (OTP) is ${otp}. Please use this code to complete your verification. Note that this OTP will expire in 5 minutes.
+
+If you did not request this, please ignore this email.
+
+Thank you,
+The Air Team`
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -826,15 +833,15 @@ app.get('/checkOrderForHost/:placeId', async (req, res) => {
     const { placeId } = req.params;
 
     try {
-        const result = await db.query("SELECT * FROM booking WHERE place_id = $1",[placeId]);
+        const result = await db.query("SELECT * FROM booking WHERE place_id = $1", [placeId]);
 
-        if(result.rows.length ===0){
-            return res.status(404).json({message:"No orders found for this place"})
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "No orders found for this place" })
         }
         res.json(result.rows);
     } catch (error) {
         console.log(error);
-        
+
     }
 })
 
