@@ -296,7 +296,7 @@ function generateOTP() {
 
 app.post('/otpSend', async (req, res) => {
     // const { id } = req.params;
-    const { email, isVarified,name } = req.body;
+    const { email, isVarified, name } = req.body;
     const otp = generateOTP();
     try {
 
@@ -639,6 +639,39 @@ app.put('/listing/:id', async (req, res) => {
     }
 })
 
+
+
+
+
+app.get('/listingsIndex', async (req, res) => {
+    const { page = 1, limit = 12 } = req.query; // Default to page 1 and limit of 12
+
+    try {
+        const offset = (page - 1) * limit; // Calculate the offset
+        const listingsQuery = `
+        SELECT *
+        FROM listings
+        ORDER BY id DESC
+        LIMIT $1 OFFSET $2
+      `;
+
+        const { rows } = await db.query(listingsQuery, [limit, offset]);
+        const countQuery = `SELECT COUNT(*) FROM listings`;
+        const { rows: countRows } = await db.query(countQuery);
+
+        const totalListings = parseInt(countRows[0].count, 10);
+        const totalPages = Math.ceil(totalListings / limit);
+
+        res.json({
+            listings: rows,
+            totalPages,
+            currentPage: parseInt(page, 10),
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 // -------------xxxxxxxxxxxxx------------------
 
