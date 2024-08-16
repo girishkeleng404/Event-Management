@@ -81,7 +81,11 @@ async function searchPlaces(){
                             placeholder='search'
                             onChange={(ev) => setSearchText(ev.target.value) }
                             value={searchText}
-                            // onClick={()=>{navigate(`/search/${searchText}`)} }
+                             onKeyDown={(ev)=>{
+                                if(ev.key === "Enter"){
+                                    searchPlaces();
+                                }
+                             }}
                         />
                         <div className='cursor-pointer' onClick={searchPlaces} >
                             < SearchIcon />
