@@ -677,12 +677,11 @@ app.put('/listing/:id', async (req, res) => {
 
 
 app.get('/sortIndex', async (req, res) => {
-    const { page = 1, limit = 12, sort = 'id' } = req.query; // Default to page 1, limit 12, and sort by 'id'
-    
+    const { page = 1, limit = 12, sort = 'id' } = req.query;  
     let order = 'ASC';
     let sortColumn = 'id';
 
-    // Determine the sort column and order based on the sort parameter
+     
     if (sort === 'newest') {
         sortColumn = 'id';
         order = 'DESC';
@@ -690,7 +689,7 @@ app.get('/sortIndex', async (req, res) => {
         sortColumn = 'id';
         order = 'ASC';
     } else if (sort === 'high_to_low') {
-        sortColumn = 'price'; // Assuming 'rating' is the column for ratings
+        sortColumn = 'price'; 
         order = 'DESC';
     } else if (sort === 'low_to_high') {
         sortColumn = 'price';
@@ -698,7 +697,7 @@ app.get('/sortIndex', async (req, res) => {
     }
 
     try {
-        const offset = (page - 1) * limit; // Calculate the offset
+        const offset = (page - 1) * limit;  
         const listingsQuery = `
             SELECT *
             FROM listings

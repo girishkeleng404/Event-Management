@@ -14,7 +14,8 @@ export default function SearchPlace() {
     const [searchData, setSearchData] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const listingsPerPage = 4;
+    const listingsPerPage = 6;
+    const [sortText, setSortText] = useState('');
 
     const { searchText } = useParams();
     console.log(searchText)
@@ -27,6 +28,7 @@ export default function SearchPlace() {
                     params: {
                         page: currentPage,
                         limit: listingsPerPage,
+                        sort: sortText,
                     }
                 });
                 console.log("Response Data:", response.data);
@@ -40,6 +42,12 @@ export default function SearchPlace() {
         fetchSearchResults();
     }, [searchText, currentPage]);
 
+    async function sortData(ev) {
+  
+        const newValue = ev.target.value;
+        setSortText(newValue);
+        
+    }
 
 
     const nextPage = () => setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
@@ -54,6 +62,26 @@ export default function SearchPlace() {
 
 
             <div className="bg-slate-50 min-h-80 py-6">
+
+            <div className="pb-8 flex justify-around">
+          <div className="grid grid-cols-4">
+
+          </div>
+          <div>
+            <select
+              className="outline-none bg-inherit border py-1 px-2 "
+              name="sort"
+              id="sort"
+              onChange={sortData}
+            >
+              <option value="oldest" >Oldest</option>
+              <option value="newest"  >Newest</option>
+              <option value="high_to_low"  >High to Low</option>
+              <option value="low_to_high"  >Low to high</option>
+            </select>
+
+          </div>
+        </div>
 
 
 
