@@ -84,11 +84,14 @@ export default function SearchPlace() {
                     ))}
                 </div>
 
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex items-center justify-center gap-4 my-6">
                
-                    <button onClick={prevPage} disabled={currentPage === 1}  > <ArrowBackIosIcon /> </button>
+               {currentPage && currentPage === 1 ? (
+                      null
+               ): <div className="cursor-pointer hover:text-gray-400 transition-all duration-250" onClick={prevPage} disabled={currentPage === 1}  > <ArrowBackIosIcon /> </div> }
+                   
                     <p> {currentPage} of {totalPages} </p>
-                    <button className="" onClick={nextPage} disabled={currentPage === totalPages} > <ArrowForwardIosIcon /> </button>
+                    <div  className="cursor-pointer hover:text-gray-400 transition-all duration-250" onClick={nextPage} disabled={currentPage === totalPages} > <ArrowForwardIosIcon /> </div>
                 </div>
             </div>
 
