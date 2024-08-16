@@ -40,7 +40,7 @@ export default function SearchPlace() {
         };
 
         fetchSearchResults();
-    }, [searchText, currentPage]);
+    }, [searchText, currentPage,sortText]);
 
     async function sortData(ev) {
   

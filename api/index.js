@@ -728,7 +728,25 @@ app.get('/sortIndex', async (req, res) => {
 app.get("/searchPlace/:searchText", async (req, res) => {
 
     const { searchText } = req.params;
-    const { page = 1, limit = 6 } = req.query;
+    const { page = 1, limit = 6,sort="id" } = req.query;
+
+    let order = 'ASC';
+    let sortColumn = 'id';
+
+     
+    if (sort === 'newest') {
+        sortColumn = 'id';
+        order = 'DESC';
+    } else if (sort === 'oldest') {
+        sortColumn = 'id';
+        order = 'ASC';
+    } else if (sort === 'high_to_low') {
+        sortColumn = 'price'; 
+        order = 'DESC';
+    } else if (sort === 'low_to_high') {
+        sortColumn = 'price';
+        order = 'ASC';
+    }
 
     try {
         console.log(searchText);
@@ -737,7 +755,7 @@ app.get("/searchPlace/:searchText", async (req, res) => {
         const result = await db.query(
             `SELECT * FROM listings 
              WHERE to_tsvector(title || ' ' || description || ' ' || address) @@ to_tsquery($1) 
-             ORDER BY id DESC LIMIT $2 OFFSET $3`,
+             ORDER BY ${sortColumn} ${order} LIMIT $2 OFFSET $3`,
             [normalizedSearchText, limit, (page - 1) * limit]
         );
 

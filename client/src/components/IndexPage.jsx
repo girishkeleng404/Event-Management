@@ -64,6 +64,7 @@ export default function IndexPage() {
               className="outline-none bg-inherit border py-1 px-2 "
               name="sort"
               id="sort"
+              
               onChange={sortData}
             >
               <option value="oldest" >Oldest</option>
