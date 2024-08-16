@@ -12,26 +12,39 @@ export default function IndexPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const listingsPerPage = 12;
+  const [sortText, setSortText] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/listingsIndex', {
+        const response = await axios.get('/sortIndex', {
           params: {
             page: currentPage,
             limit: listingsPerPage,
+            sort: sortText,
           },
           withCredentials: true,
         });
         setListingData(response.data.listings);
         setTotalPages(response.data.totalPages);
+         
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, sortText]);
+
+
+
+  async function sortData(ev) {
+  
+      const newValue = ev.target.value;
+      setSortText(newValue);
+      
+  }
+
 
   const nextPage = () => setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
   const prevPage = () => setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
@@ -44,14 +57,19 @@ export default function IndexPage() {
       <div className="bg-slate-50 py-6">
         <div className="pb-8 flex justify-around">
           <div className="grid grid-cols-4">
-            
+
           </div>
           <div>
-            <select className="outline-none bg-inherit border py-1 px-2 " name="short" id="">
-              <option value="relevent">Relevent</option>
-              <option value="newest">Newest</option>
-              <option value="high_to_low">High to Low</option>
-              <option value="low_to_high">Low to high</option>
+            <select
+              className="outline-none bg-inherit border py-1 px-2 "
+              name="sort"
+              id="sort"
+              onChange={sortData}
+            >
+              <option value="oldest" >Oldest</option>
+              <option value="newest"  >Newest</option>
+              <option value="high_to_low"  >High to Low</option>
+              <option value="low_to_high"  >Low to high</option>
             </select>
 
           </div>

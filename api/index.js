@@ -644,17 +644,67 @@ app.put('/listing/:id', async (req, res) => {
 
 
 
-app.get('/listingsIndex', async (req, res) => {
-    const { page = 1, limit = 12 } = req.query; // Default to page 1 and limit of 12
+// app.get('/listingsIndex', async (req, res) => {
+//     const { page = 1, limit = 12 } = req.query; // Default to page 1 and limit of 12
+
+//     try {
+//         const offset = (page - 1) * limit; // Calculate the offset
+//         const listingsQuery = `
+//         SELECT *
+//         FROM listings
+//         ORDER BY id ASC
+//         LIMIT $1 OFFSET $2
+//       `;
+
+//         const { rows } = await db.query(listingsQuery, [limit, offset]);
+//         const countQuery = `SELECT COUNT(*) FROM listings`;
+//         const { rows: countRows } = await db.query(countQuery);
+
+//         const totalListings = parseInt(countRows[0].count, 10);
+//         const totalPages = Math.ceil(totalListings / limit);
+
+//         res.json({
+//             listings: rows,
+//             totalPages,
+//             currentPage: parseInt(page, 10),
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// });
+
+
+
+app.get('/sortIndex', async (req, res) => {
+    const { page = 1, limit = 12, sort = 'id' } = req.query; // Default to page 1, limit 12, and sort by 'id'
+    
+    let order = 'ASC';
+    let sortColumn = 'id';
+
+    // Determine the sort column and order based on the sort parameter
+    if (sort === 'newest') {
+        sortColumn = 'id';
+        order = 'DESC';
+    } else if (sort === 'oldest') {
+        sortColumn = 'id';
+        order = 'ASC';
+    } else if (sort === 'high_to_low') {
+        sortColumn = 'price'; // Assuming 'rating' is the column for ratings
+        order = 'DESC';
+    } else if (sort === 'low_to_high') {
+        sortColumn = 'price';
+        order = 'ASC';
+    }
 
     try {
         const offset = (page - 1) * limit; // Calculate the offset
         const listingsQuery = `
-        SELECT *
-        FROM listings
-        ORDER BY id DESC
-        LIMIT $1 OFFSET $2
-      `;
+            SELECT *
+            FROM listings
+            ORDER BY ${sortColumn} ${order}
+            LIMIT $1 OFFSET $2
+        `;
 
         const { rows } = await db.query(listingsQuery, [limit, offset]);
         const countQuery = `SELECT COUNT(*) FROM listings`;
@@ -676,29 +726,27 @@ app.get('/listingsIndex', async (req, res) => {
 
 
 
- 
-
 app.get("/searchPlace/:searchText", async (req, res) => {
-   
+
     const { searchText } = req.params;
     const { page = 1, limit = 6 } = req.query;
-    
+
     try {
         console.log(searchText);
         const normalizedSearchText = searchText.replace(/ /g, ' & ');
-         
+
         const result = await db.query(
             `SELECT * FROM listings 
              WHERE to_tsvector(title || ' ' || description || ' ' || address) @@ to_tsquery($1) 
              ORDER BY id DESC LIMIT $2 OFFSET $3`,
-            [normalizedSearchText,limit, (page - 1) * limit]
+            [normalizedSearchText, limit, (page - 1) * limit]
         );
-         
+
         const countQuery = `
         SELECT COUNT(*) FROM listings
         WHERE to_tsvector(title || ' ' || description || ' ' || address) @@ to_tsquery($1)
     `;
-         
+
         const { rows: countRows } = await db.query(countQuery, [normalizedSearchText]);
         const totalListings = parseInt(countRows[0].count, 10);
         const totalPages = Math.ceil(totalListings / limit);
@@ -709,13 +757,14 @@ app.get("/searchPlace/:searchText", async (req, res) => {
             currentPage: parseInt(page, 10),
         });
 
-        
+
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred while searching for listings.");
     }
 
 })
+
 
 
 
