@@ -39,8 +39,28 @@ export default function IndexPage() {
   return (
     <>
       <Layout />
-      <div className="bg-slate-50 py-8">
+
+
+      <div className="bg-slate-50 py-6">
+        <div className="pb-8 flex justify-around">
+          <div className="grid grid-cols-4">
+            
+          </div>
+          <div>
+            <select className="outline-none bg-inherit border py-1 px-2 " name="short" id="">
+              <option value="relevent">Relevent</option>
+              <option value="newest">Newest</option>
+              <option value="high_to_low">High to Low</option>
+              <option value="low_to_high">Low to high</option>
+            </select>
+
+          </div>
+        </div>
+
         <div className="w-11/12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 lg:gap-12 lg:px-12 md:px-10 m-auto">
+
+
+
           {listingData.length > 0 && listingData.map((item, inx) => (
             <Link to={`/DetailsPage/${item.id}`} key={item.id || inx} className="flex flex-col">
               <div className="m-auto flex flex-col">
@@ -59,7 +79,7 @@ export default function IndexPage() {
           ))}
         </div>
         <div className="flex justify-center mt-8 gap-4">
-          {currentPage && currentPage >1 ? (
+          {currentPage && currentPage > 1 ? (
             <button onClick={prevPage} disabled={currentPage === 1} className="bg-gray-100 p-2 rounded-lg flex items-center">
               <ArrowBackIosIcon />
               {/* Previous */}
