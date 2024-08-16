@@ -108,7 +108,7 @@ async function searchPlaces(){
 
                     position="bottom">
                     <div className='flex flex-col bg-gray-100 py-2 pl-2 pr-8 justify-start'>
-                        <Link to={'/profile'} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">  profile
+                        <Link to={'/Dashboard'} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">  profile
                         </Link>
                         <Link to={'/'} onClick={handleClick} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">Logout</Link>
 

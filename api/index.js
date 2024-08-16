@@ -685,15 +685,21 @@ app.get("/searchPlace/:searchText", async (req, res) => {
     
     try {
         console.log(searchText);
+        const normalizedSearchText = searchText.replace(/ /g, ' & ');
          
         const result = await db.query(
             `SELECT * FROM listings 
              WHERE to_tsvector(title || ' ' || description || ' ' || address) @@ to_tsquery($1) 
              ORDER BY id DESC LIMIT $2 OFFSET $3`,
-            [searchText.replace(/ /g, ' & '),limit, (page - 1) * limit]
+            [normalizedSearchText,limit, (page - 1) * limit]
         );
-        const countQuery = `SELECT COUNT(*) FROM listings`;
-        const { rows: countRows } = await db.query(countQuery);
+         
+        const countQuery = `
+        SELECT COUNT(*) FROM listings
+        WHERE to_tsvector(title || ' ' || description || ' ' || address) @@ to_tsquery($1)
+    `;
+         
+        const { rows: countRows } = await db.query(countQuery, [normalizedSearchText]);
         const totalListings = parseInt(countRows[0].count, 10);
         const totalPages = Math.ceil(totalListings / limit);
 

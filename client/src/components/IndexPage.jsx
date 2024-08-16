@@ -67,7 +67,7 @@ export default function IndexPage() {
           ) : null}
           <p className="bg-gray-100 p-2 rounded-lg flex items-center">Page {currentPage} of {totalPages}</p>
 
-          <button onClick={nextPage} disabled={currentPage === totalPages} className="bg-gray-100 p-2 rounded-lg flex items-center">
+          <button onClick={nextPage} disabled={currentPage === totalPages} className="bg-transparent p-2 rounded-lg flex items-center">
             {/* Next */}
             <ArrowForwardIosIcon />
           </button>

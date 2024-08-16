@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router-dom";
-import Header from "../Header";
-import { UserContext } from "../UserContex";
-import { useContext, useEffect, useState } from "react";
+import Header from "../Header"; 
+import {  useEffect, useState } from "react";
 import axios from "axios";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -39,7 +38,7 @@ export default function SearchPlace() {
         };
 
         fetchSearchResults();
-    }, [searchText,currentPage]);
+    }, [searchText, currentPage]);
 
 
 
@@ -86,10 +85,10 @@ export default function SearchPlace() {
                 </div>
 
                 <div className="flex items-center justify-center gap-4">
-
-                    <button onClick={prevPage} disabled={currentPage === 1}  > <ArrowBackIosIcon/> </button>
+               
+                    <button onClick={prevPage} disabled={currentPage === 1}  > <ArrowBackIosIcon /> </button>
                     <p> {currentPage} of {totalPages} </p>
-                    <button className="" onClick={nextPage} disabled={currentPage === totalPages} > <ArrowForwardIosIcon/> </button>
+                    <button className="" onClick={nextPage} disabled={currentPage === totalPages} > <ArrowForwardIosIcon /> </button>
                 </div>
             </div>
 
