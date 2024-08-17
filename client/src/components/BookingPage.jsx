@@ -32,7 +32,8 @@ export default function BookingPage({ onChange, data, eventDate, checkInDate, })
 
     const priceNum = Number(data.price);
     let twentyPercent = priceNum * 0.2;
-    const totalPrice = (Number(data.price) + twentyPercent).toFixed(0);
+    // const totalPrice = (Number(data.price) + twentyPercent).toFixed(0);
+    const totalPrice = (Number(data.price)).toFixed(0);
 
     useEffect(() => {
         const postBooking = async () => {
@@ -125,7 +126,7 @@ export default function BookingPage({ onChange, data, eventDate, checkInDate, })
 
                     </div>
                     <div className="grid py-12">
-                       <Razorpay data={data} twentyPercent={twentyPercent} totalPrice={totalPrice} setOrderId={setOrderId} paymentId={paymentId} setPaymentId={setPaymentId} setSignature={setSignature} setResponseState={setResponseState} setVerify_Payment_Signature={setVerify_Payment_Signature} />
+                       <Razorpay data={data} twentyPercent={twentyPercent} totalPrice={totalPrice} setOrderId={setOrderId} paymentId={paymentId} setPaymentId={setPaymentId} setSignature={setSignature} setResponseState={setResponseState} setVerify_Payment_Signature={setVerify_Payment_Signature} guests={guests} />
                     </div>
                 </div>
 

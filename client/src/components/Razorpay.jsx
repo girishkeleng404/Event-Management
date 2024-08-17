@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export default function Razorpay({data,totalPrice,twentyPercent,setOrderId,paymentId, setPaymentId, setSignature, setResponseState, setVerify_Payment_Signature}) {
+export default function Razorpay({data,totalPrice,twentyPercent,setOrderId,paymentId, setPaymentId, setSignature, setResponseState, setVerify_Payment_Signature,guests}) {
 
 
 
@@ -9,9 +9,12 @@ export default function Razorpay({data,totalPrice,twentyPercent,setOrderId,payme
     // const [responseState, setResponseState] = useState([])
     const [order, setOrder] = useState(null);
 
-    const amount =totalPrice*100;
+    const amount =guests*(totalPrice*100);
     const currency = "INR";
     const receiptId = 'mkLove';
+
+    const totalPriceAfter = (Number((data.price)*guests) + twentyPercent).toFixed(0);
+
 
 
     useEffect(() => {
@@ -147,7 +150,7 @@ useEffect(()=>{
         <div>
          <div className="flex flex-col gap-4 w-9/12 mx-auto  ">
                             <div className="flex gap-2">
-                                <span className="text-lg">Price : </span>
+                                <span className="text-lg">Price : {guests} x </span>
                                 <div className="text-lg"> ₹{data.price} </div>
                             </div>
                             <div className="flex gap-2">
@@ -156,7 +159,7 @@ useEffect(()=>{
                             </div>
                             <div className="flex gap-2">
                                 <span className="text-xl">Total Price : </span>
-                                <div className="text-xl"> ₹{totalPrice} </div>
+                                <div className="text-xl"> ₹{totalPriceAfter} </div>
                             </div>
 
                             <button className="bg-primary" onClick={paymentHandler}>Pay</button>
