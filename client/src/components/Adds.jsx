@@ -50,12 +50,7 @@ fetchData();
 
               {listingData.length > 0 && listingData.map((item,inx)=>(
                 <Link to={`/Dashboard/Adds/${item.id}`} key={item.id||inx} className="grid grid-cols-[1fr_6fr] gap-8">
-                  {/* {item.added_photos.map((photo,photoInx)=>( 
-                    <div className="" key={photoInx}>
-                      <img className="h-32 w-36" src={`http://localhost:4000/uploads/${photo}`}alt={`Photo of ${item.title}`} />
-                     
-                    </div>
-                  ))} */}
+                 
                   {item.added_photos && (
                     <div>
                     <img className="h-32 w-40" src={`http://localhost:4000/uploads/${item.added_photos[0]}`}alt={`Photo of ${item.title}`} />
@@ -73,6 +68,8 @@ fetchData();
                 </Link>
                
               ))}
+
+               
                
             </div>
           

@@ -13,24 +13,24 @@ import Location from './components/Location';
 import SearchIcon from '@mui/icons-material/Search';
 
 
-export default function Header({setSearchData}) {
+export default function Header({ setSearchData }) {
 
-  
 
- const navigate = useNavigate();
+
+    const navigate = useNavigate();
 
     const [check, setCheck] = useState(true);
 
     const { user } = useContext(UserContext)
     const { profile } = useContext(UserContext)
     // console.log(user)
- 
+
     const { setUser } = useContext(UserContext)
     const [redirect, setRedirect] = useState(false)
 
     const [searchText, setSearchText] = useState('')
- 
-     
+
+
 
     async function handleClick() {
         try {
@@ -42,22 +42,22 @@ export default function Header({setSearchData}) {
             console.log(error);
         }
     }
-    
 
 
 
-async function searchPlaces(){
-    try {
-        // const response = await axios.get(`/searchPlace/${searchText}`);
-        // console.log(response.data)
-        navigate(`/search/${searchText}`)
-        
-      
-    } catch (error) {
-        console.log(error);
+
+    async function searchPlaces() {
+        try {
+            // const response = await axios.get(`/searchPlace/${searchText}`);
+            // console.log(response.data)
+            navigate(`/search/${searchText}`)
+
+
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
-    
+
 
 
     return (
@@ -79,13 +79,13 @@ async function searchPlaces(){
                             className='bg-inherit outline-none border-none'
                             type="text"
                             placeholder='search'
-                            onChange={(ev) => setSearchText(ev.target.value) }
+                            onChange={(ev) => setSearchText(ev.target.value)}
                             value={searchText}
-                             onKeyDown={(ev)=>{
-                                if(ev.key === "Enter"){
+                            onKeyDown={(ev) => {
+                                if (ev.key === "Enter") {
                                     searchPlaces();
                                 }
-                             }}
+                            }}
                         />
                         <div className='cursor-pointer' onClick={searchPlaces} >
                             < SearchIcon />
@@ -112,12 +112,14 @@ async function searchPlaces(){
 
                     position="bottom">
                     <div className='flex flex-col bg-gray-100 py-2 pl-2 pr-8 justify-start'>
-                        <Link to={'/Dashboard'} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">  profile
-                        </Link>
+                        {user ? (<Link to={'/Dashboard'} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">  profile
+                        </Link>) : <Link className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">  profile
+                        </Link>}
+
                         <Link to={'/'} onClick={handleClick} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">Logout</Link>
 
+                        {user ? (<Link to={'/Dashboard'} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">DashBoard</Link>) : <Link className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer ">DashBoard</Link>}
 
-                        <Link to={'/Dashboard'} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">DashBoard</Link>
                     </div>
 
                 </Popup>
