@@ -27,7 +27,7 @@ export default function IndexPage() {
         });
         setListingData(response.data.listings);
         setTotalPages(response.data.totalPages);
-         
+
       } catch (error) {
         console.log(error);
       }
@@ -39,32 +39,36 @@ export default function IndexPage() {
 
 
   async function sortData(ev) {
-  
-      const newValue = ev.target.value;
-      setSortText(newValue);
-      
+
+    const newValue = ev.target.value;
+    setSortText(newValue);
+
   }
 
 
-  const nextPage = () => setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
-  const prevPage = () => setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+  const nextPage = () => {  setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages)); window.scrollTo(0, 0);  }
+  
+  const prevPage = () => {
+    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+    window.scrollTo(0, 0);
+  }
 
   return (
-    <>
+    <div className="overflow-hidden">
       <Layout />
 
 
-      <div className="bg-slate-50 py-6">
-        <div className="pb-8 flex justify-around">
+      <div className="bg-slate-50 py-6  ">
+        <div className="pb-8 flex justify-between lg:justify-around pr-6">
           <div className="grid grid-cols-4">
 
           </div>
-          <div>
+          <div className="">
             <select
               className="outline-none bg-inherit border py-1 px-2 "
               name="sort"
               id="sort"
-              
+
               onChange={sortData}
             >
               <option value="oldest" >Oldest</option>
@@ -76,27 +80,34 @@ export default function IndexPage() {
           </div>
         </div>
 
-        <div className="w-11/12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 lg:gap-12 lg:px-12 md:px-10 m-auto">
+        <div className=" mx-3 overflow-hidden">
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 lg:gap-12 lg:px-12 md:px-10 mx-auto   ">
 
 
 
-          {listingData.length > 0 && listingData.map((item, inx) => (
-            <Link to={`/DetailsPage/${item.id}`} key={item.id || inx} className="flex flex-col">
-              <div className="m-auto flex flex-col">
-                <div className="">
-                  {item.added_photos && (
-                    <img className="w-10/12 aspect-square rounded-lg object-cover" src={`http://localhost:4000/uploads/${item.added_photos[0]}`} alt={`Photo of ${item.title}`} />
-                  )}
+            {listingData.length > 0 && listingData.map((item, inx) => (
+              <Link to={`/DetailsPage/${item.id}`} key={item.id || inx} className="flex flex-col  ">
+                <div className=" flex flex-col justify-center items-center my-4">
+                  <div className=" ">
+                    {item.added_photos && (
+                      <img className="w-full aspect-square rounded-lg object-cover " src={`http://localhost:4000/uploads/${item.added_photos[0]}`} alt={`Photo of ${item.title}`} />
+                    )}
+                  </div>
+                  <div className="text-gray-800 text-start ">
+                    <h1 className="text-lg capitalize">{item.title}</h1>
+                    <h1 className="text-sm"> {item.type} </h1>
+                    <h1 className="text-sm"> {item.address} </h1>
+                  </div>
                 </div>
-                <div className="text-gray-800">
-                  <h1 className="text-lg capitalize">{item.title}</h1>
-                  <h1 className="text-sm"> {item.type} </h1>
-                  <h1 className="text-sm"> {item.address} </h1>
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
+
         </div>
+
+
+
         <div className="flex justify-center mt-8 gap-4">
           {currentPage && currentPage > 1 ? (
             <button onClick={prevPage} disabled={currentPage === 1} className="bg-gray-100 p-2 rounded-lg flex items-center">
@@ -113,6 +124,6 @@ export default function IndexPage() {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
