@@ -108,16 +108,16 @@ export default function IndexPage() {
 
 
 
-        <div className="flex justify-center mt-8 gap-4">
+        <div className="flex justify-center my-8 gap-2">
           {currentPage && currentPage > 1 ? (
             <button onClick={prevPage} disabled={currentPage === 1} className="bg-gray-100 p-2 rounded-lg flex items-center">
               <ArrowBackIosIcon />
               {/* Previous */}
             </button>
           ) : null}
-          <p className="bg-gray-50 p-2 rounded-lg flex items-center">Page {currentPage} of {totalPages}</p>
+          <p className="bg-gray-50 p-1 rounded-lg flex items-center">{currentPage} of {totalPages}</p>
 
-          <button onClick={nextPage} disabled={currentPage === totalPages} className="bg-transparent p-2 rounded-lg flex items-center">
+          <button onClick={nextPage} disabled={currentPage === totalPages} className="bg-transparent p-1 rounded-lg flex items-center">
             {/* Next */}
             <ArrowForwardIosIcon />
           </button>

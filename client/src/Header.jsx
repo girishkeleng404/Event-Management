@@ -63,7 +63,7 @@ export default function Header({ setSearchData }) {
     return (
         <div className="flex align-center justify-around py-4 bg-gray-100 ">
 
-            <div className="flex gap-8 items-center">
+            <div className="flex gap-8 items-center mx-2">
                 <Link to={'/'} className='flex items-center gap-2'>
                     <FitbitIcon />
                     {/* <h1 className="text-primary text-2xl">BookMyShow</h1> */}
@@ -92,10 +92,9 @@ export default function Header({ setSearchData }) {
                         </div>
                     </div>
 
-                    <Location />
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                    </svg>
+                      <Location />
+
+                    
 
                 </div>
 
@@ -104,21 +103,25 @@ export default function Header({ setSearchData }) {
                 {!user && <Link to="/login" className="bg-primary text-white px-3 py-1 rounded-md cursor-pointer">sign in</Link>}
 
 
-                <Popup trigger={<div className='flex gap-2 items-center border border-gray-400 rounded-full p-1'>
+                <Popup trigger={<div className='flex gap-1 lg:gap-2 items-center border border-gray-400 rounded-full px-0.5 lg:p-1 justify-center mr-2'>
                     {/* {user && <h1 className="text-primary">{user.name}</h1>} */}
-                    {user && profile && <img src={`http://localhost:4000/uploads/${profile.photos}`} alt="profile" className="h-8 w-8 rounded-full" />}
-                    <MenuIcon />
+                    {user && profile && <img src={`http://localhost:4000/uploads/${profile.photos}`} alt="profile" className=" h-7 w-7 lg:h-8 lg:w-8 rounded-full" />}
+                    <div className='text-md lg:text-2xl flex items-center'>
+                       <MenuIcon fontSize=''/> 
+                    </div>
+                    
                 </div>}
 
                     position="bottom">
-                    <div className='flex flex-col bg-gray-100 py-2 pl-2 pr-8 justify-start'>
-                        {user ? (<Link to={'/Dashboard'} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">  profile
-                        </Link>) : <Link className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer ">  profile
+                        
+                    <div className='flex flex-col bg-gray-100 py-2 pl-2 pr-2 justify-start mr-32 mt-6 h-32 w-32 lg:w-48 bg-opacity-60 backdrop-blur-xl'>
+                        {user ? (<Link to={'/Dashboard'} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer hover:bg-gray-200 transition-all duration-300 ">  profile
+                        </Link>) : <Link className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer  ">  profile
                         </Link>}
 
-                        <Link to={'/'} onClick={handleClick} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">Logout</Link>
+                        <Link to={'/'} onClick={handleClick} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   hover:bg-gray-200 transition-all duration-300  ">Logout</Link>
 
-                        {user ? (<Link to={'/Dashboard'} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   ">DashBoard</Link>) : <Link className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer ">DashBoard</Link>}
+                        {user ? (<Link to={'/Dashboard'} className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer   hover:bg-white/30 transition-all duration-300  ">DashBoard</Link>) : <Link className=" sm:top-8 sm:right-8  sm:px-4 py-1 sm:py-2 rounded-md cursor-pointer ">DashBoard</Link>}
 
                     </div>
 
