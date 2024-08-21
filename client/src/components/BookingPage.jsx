@@ -89,9 +89,9 @@ export default function BookingPage({ onChange, data, eventDate, checkInDate, })
         <div className="">
             <Header />
 
-            <div className="w-full h-95vh grid grid-cols-[1fr_2fr] bg-cover " style={{ backgroundImage: `url(http://localhost:4000/uploads/${data.added_photos[0]})` }}>
+            <div className="w-full h-95vh grid grid-cols-1 md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_2fr] bg-cover " style={{ backgroundImage: `url(http://localhost:4000/uploads/${data.added_photos[0]})` }}>
 
-                <div className="flex flex-col items-center justify-start pt-20   ">
+                <div className="hidden sm:block lg:flex flex-col items-center justify-start pt-20   ">
 
                     <h1 className="text-3xl text-white"> {data.title} </h1>
 
@@ -109,8 +109,8 @@ export default function BookingPage({ onChange, data, eventDate, checkInDate, })
                 </div>
 
 
-                <div className="grid grid-cols-[3fr_2fr]  bg-slate-100 rounded-l-3xl backdrop-blur-xl bg-white/30 ... gap-8">
-                    <div className=" relative flex flex-col justify-start items-center px-8">
+                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-[3fr_2fr]   lg:rounded-l-3xl backdrop-blur-xl bg-white/30 ... gap-1 lg:gap-8  ">
+                    <div className=" relative flex flex-col justify-start items-center px-4 lg:px-8 h-min">
 
 
                         <h1 className="absolute z-10 top-6 left-4 cursor-pointer" onClick={() => onChange(false)}>
@@ -125,7 +125,7 @@ export default function BookingPage({ onChange, data, eventDate, checkInDate, })
 
 
                     </div>
-                    <div className="grid py-12">
+                    <div className="grid py-2 lg:py-12">
                        <Razorpay data={data} twentyPercent={twentyPercent} totalPrice={totalPrice} setOrderId={setOrderId} paymentId={paymentId} setPaymentId={setPaymentId} setSignature={setSignature} setResponseState={setResponseState} setVerify_Payment_Signature={setVerify_Payment_Signature} guests={guests} />
                     </div>
                 </div>

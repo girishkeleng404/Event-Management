@@ -125,21 +125,21 @@ export default function DetailsPage() {
                     </div>
                 )}
 
-                <div className="relative z-10 text-white flex flex-col pt-12 pl-12 ">
+                <div className="relative z-10 text-white flex flex-col pt-12 px-6 lg:pl-12 ">
 
 
-                    <div className="flex flex-col items-start gap-8">
-                        <h1 className=" text-2xl lg:text-7xl"> {listingData.title} </h1>
+                    <div className="flex flex-col items-start gap-4 lg:gap-8">
+                        <h1 className=" text-3xl lg:text-7xl md:text-5xl capitalize"> {listingData.title} </h1>
                         <h2 className="hidden md:block text-md "> {listingData.description} </h2>
-                        <div>
+                        <div className="flex flex-col justify-between">
                             {/* <h1>Price: {listingData.price}</h1> */}
-                            <div className="flex items-center gap-8 my-4">
-                                <div className="flex items-center">
+                            <div className="flex items-center gap-12 my-4 ">
+                                <div className="flex items-center ">
                                     <LocationOnIcon />
-                                    <a className="block text-xl underline " target="_blank" href={"https://www.google.com/maps/?q=" + listingData.address}> {" " + listingData.address}</a>
+                                    <a className="block text-sm lg:text-xl underline " target="_blank" href={"https://www.google.com/maps/?q=" + listingData.address}> {" " + listingData.address}</a>
                                 </div>
 
-                                <div>
+                                <div className="text-sm lg:text-base">
                                     {listingData.is_same_day ? <h1>Event date: {eventDate}</h1> : <h1>Start Date: {checkInDate}</h1>}
 
                                 </div>
@@ -147,13 +147,14 @@ export default function DetailsPage() {
 
 
 
-                            {/* <button className="bg-primary py-2 px-4 my-4 rounded-lg mr-4">Host info</button> */}
-                            <div className="grid grid-cols-2 items-center gap-12">
-                                <button onClick={() => setBook(true)} className="py-2 px-8 my-4 rounded-lg bg-primary">Reserve</button>
+                           
+                            <div className="grid grid-cols-1 lg:grid-cols-2 items-center lg:gap-12 gap-2 mt-32">
+
                                 <div className="flex gap-4 text-xl">
                                     <span>Price:</span>
                                     <div className="text-xl"> ₹ {listingData.price}  </div>
                                 </div>
+                                <button onClick={() => setBook(true)} className="py-2 px-8 my-4 rounded-lg bg-primary">Reserve</button>
 
                             </div>
 
