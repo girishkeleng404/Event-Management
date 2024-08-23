@@ -46,22 +46,22 @@ fetchData();
             Add ads
           </Link>
             </div>
-            <div className="w-full flex flex-col gap-4">
+            <div className="w-full grid grid-cols-1 gap-4 ">
 
               {listingData.length > 0 && listingData.map((item,inx)=>(
-                <Link to={`/Dashboard/Adds/${item.id}`} key={item.id||inx} className="grid grid-cols-[1fr_6fr] gap-8">
+                <Link to={`/Dashboard/Adds/${item.id}`} key={item.id||inx} className="grid lg:grid-cols-[1fr_6fr] gap-8 grid-cols-[2fr_3fr] ">
                  
                   {item.added_photos && (
                     <div>
-                    <img className="h-32 w-40" src={`http://localhost:4000/uploads/${item.added_photos[0]}`}alt={`Photo of ${item.title}`} />
+                    <img className="h-32 w-40 object-cover" src={`http://localhost:4000/uploads/${item.added_photos[0]}`}alt={`Photo of ${item.title}`} />
                   </div>
                   )}
                   
                  <div>
-                  <h1>{item.title}</h1>
-                 <h1> {item.type} </h1>
-                 <h1> {item.address} </h1>
-                 <h1> {item.description} </h1>
+                  <h1 className=" text-lg lg:text-xl capitalize ">{item.title}</h1>
+                 <h1 className="text-sm lg:text-base"> {item.type} </h1>
+                 <h1 className="text-sm lg:text-base"> {item.address} </h1>
+                 {/* <h1> {item.description} </h1> */}
                  </div>
 
                  

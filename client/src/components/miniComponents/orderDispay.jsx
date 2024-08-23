@@ -11,7 +11,7 @@ export default function OrderDisplay({ orderData, urData }) {
 
 
     return (
-        <div className="w-11/12 grid grid-cols-3 gap-12">
+        <div className="w-11/12 grid grid-cols-1 lg:grid-cols-3 gap-12">
 
             {/* {urData.map((userData, inx) => ( 
                 <Link to={`/orderDetails/${userData.id}`} key={inx}> */}
@@ -23,17 +23,17 @@ export default function OrderDisplay({ orderData, urData }) {
 
 
                             {listingArray.map((listing, inx) => (
-                                <Link to={`/orderDetails/${listing.id}`}  key={inx} className="grid grid-cols-[2fr_6fr] gap-8  ">
+                                <Link to={`/orderDetails/${listing.id}`}  key={inx} className="grid lg:grid-cols-[2fr_6fr] gap-8 grid-cols-[2fr_3fr] ">
 
 
-                                    <div className="w-44 aspect-square overflow-hidden">
+                                    <div className="lg:w-44 aspect-square overflow-hidden">
                                         <img className="aspect-square w-44" key={inx} src={`http://localhost:4000/uploads/${listing.added_photos[0]}`} alt="" />
                                     </div>
 
 
                                     <div className="">
-                                        <p className="text-xl capitalize">{listing.title}</p>
-                                        <p className="text-lg">{listing.address}</p>
+                                        <p className="lg:text-xl text-lg capitalize">{listing.title}</p>
+                                        <p className="lg:text-lg">{listing.address}</p>
                                         {/* <p>{listing.description}</p> */}
 
                                         {listing.event_date && (listing.event_date.split('T')[0])}

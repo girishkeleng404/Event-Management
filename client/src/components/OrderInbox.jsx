@@ -56,14 +56,14 @@ export default function OrderInbox() {
             <Header />
             <div className="flex flex-1">
                 <Sidebar />
-                <main className="mx-auto w-11/12 p-4 flex flex-col bg-slate-200">
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                <main className="mx-auto w-full lg:w-11/12 p-6 flex flex-col bg-slate-200">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-8">
                         {placeData.length > 0 && placeData.map((item, inx) => (
-                            <div className="aspect-square lg:h-60 lg:w-80 object-cover cursor-pointer " key={inx} onClick={()=> {setShowOrder(true); setPlaceId(item.id)} }>
+                            <div className="aspect-square lg:h-60 object-cover cursor-pointer items-baseline " key={inx} onClick={()=> {setShowOrder(true); setPlaceId(item.id)} }>
 
-                                <p className="text-lg"> {item.title} </p>
                                      
-                                <img className=" lg:h-60 lg:w-80 aspect-square overflow-hidden object-cover" src={`http://localhost:4000/uploads/${item.added_photos[0]}`} alt="" />
+                                <img className=" h-44 aspect-square overflow-hidden object-cover" src={`http://localhost:4000/uploads/${item.added_photos[0]}`} alt="" />
+                                <p className="lg:text-xl text-lg"> {item.title} </p>
                             </div>
                         ))}
 
