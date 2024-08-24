@@ -59,7 +59,7 @@ export default function ProfileHome() {
             <img
               src={`http://localhost:4000/uploads/${userData.photos}`}
               alt=""
-              className="h-32 rounded-full aspect-square drop-shadow-xl"
+              className="h-32 rounded-full aspect-square drop-shadow-xl object-cover"
             />
             <div className="capitalize text-lg font-semibold"> {userData.name} </div>
             <div className="text-center text-gray-600">{userData.bio}</div>
