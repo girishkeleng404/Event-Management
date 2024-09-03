@@ -2,9 +2,10 @@ import express from 'express'
 import bcrypt from "bcryptjs";
 import { generateAuthToken } from '../auth.js'
 import db from '../config/database.js';
-const saltRounds = 10;
+import passport from 'passport';
+const saltRounds = process.env.NUMBER_OF_SALT||10;
 
-const register = async(req,res)=>{
+const register = async (req, res) => {
     const { name, email, password } = req.body;
     try {
         const checkUser = await db.query("SELECT * FROM users WHERE email = $1", [email]);
@@ -50,4 +51,18 @@ const register = async(req,res)=>{
     });
 }
 
-export default register;
+const login = (req, res) => {
+    if (!req.user) {
+        return res.status(400).json({ message: "User not found or authentication failed" });
+    }
+    const authToken = generateAuthToken(req.user);
+    res.cookie('authToken', authToken, {
+        maxAge: 3600000, // 1 hour
+        httpOnly: true,
+        secure: true, // Send the cookie over HTTPS only
+        sameSite: 'Strict' // Strictly same site
+    });
+    console.log(req.user);
+    res.json(req.user);
+};
+export { register, login };
