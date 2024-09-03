@@ -45,7 +45,7 @@ const HeaderSm = () => {
         closeOnDocumentClick
         mouseLeaveDelay={200}
         mouseEnterDelay={300}
-        contentStyle={{ padding: '8px 10px', border: 'none', background: 'gray', borderRadius: 5, rowGap: 4, width: '10rem', backdropFilter:'2rem' }}  >
+        contentStyle={{ padding: '8px 10px', border: 'none', background: 'gray', borderRadius: 5, rowGap: 4, width: '10rem',  }}  >
 
         <div className='py-2 link-hover-effect'>
           <Link to={'/Dashboard'}>Home</Link>
