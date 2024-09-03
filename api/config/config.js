@@ -2,17 +2,15 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export default function config(){
-
- const config = {
-   development:{
+const config = {
+  development: {
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
-   },
-   test: {
+    port: process.env.DB_PORT,
+  },
+  test: {
     user: 'root',
     password: null,
     database: 'database_test',
@@ -24,8 +22,8 @@ export default function config(){
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
-  }
- }   
- return config;
-}
+    port: process.env.DB_PORT,
+  },
+};
+
+export default config;
