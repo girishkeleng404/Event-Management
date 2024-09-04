@@ -55,6 +55,21 @@ The Air Team`
 }
 
 
+const verifyOTP = async(req,res)=>{
 
+    const { email, frontOTP } = req.body;
+    try {
+        const otpRecord = await db.query("SELECT * FROM otps WHERE email_or_phone = $1 ORDER BY id DESC LIMIT 1", [email]);
+        if (otpRecord.rows.length > 0 && otpRecord.rows[0].otp === frontOTP && otpRecord.rows[0].expiration_time > new Date()) {
+            res.json({ success: true });
+        } else {
+            res.json({ success: false });
+        }
+    } catch (error) {
+        res.json(error)
+        console.log(error);
+    }
 
-export { emailOTP };
+}
+
+export { emailOTP, verifyOTP };

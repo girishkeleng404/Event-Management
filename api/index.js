@@ -22,6 +22,7 @@ import nodemailer from "nodemailer";
 import authRoute from './routes/authRoute.js'
 import logoutRoute from './routes/logoutRoute.js'
 import userRoute from './routes/userRoute.js'
+import otpRoute from './routes/otpRoute.js'
 import passport from './config/passport_config.js'
 import db from "./config/database.js";
 
@@ -73,6 +74,9 @@ app.use(logoutRoute);
 
 // all user routes
 app.use(userRoute);
+
+
+app.use(otpRoute);
 
 
 
@@ -128,20 +132,20 @@ app.use(userRoute);
 // })
 
 
-app.post('/auth/verify-otp', async (req, res) => {
-    const { email, frontOTP } = req.body;
-    try {
-        const otpRecord = await db.query("SELECT * FROM otps WHERE email_or_phone = $1 ORDER BY id DESC LIMIT 1", [email]);
-        if (otpRecord.rows.length > 0 && otpRecord.rows[0].otp === frontOTP && otpRecord.rows[0].expiration_time > new Date()) {
-            res.json({ success: true });
-        } else {
-            res.json({ success: false });
-        }
-    } catch (error) {
-        res.json(error)
-        console.log(error);
-    }
-})
+// app.post('/auth/verify-otp', async (req, res) => {
+//     const { email, frontOTP } = req.body;
+//     try {
+//         const otpRecord = await db.query("SELECT * FROM otps WHERE email_or_phone = $1 ORDER BY id DESC LIMIT 1", [email]);
+//         if (otpRecord.rows.length > 0 && otpRecord.rows[0].otp === frontOTP && otpRecord.rows[0].expiration_time > new Date()) {
+//             res.json({ success: true });
+//         } else {
+//             res.json({ success: false });
+//         }
+//     } catch (error) {
+//         res.json(error)
+//         console.log(error);
+//     }
+// })
 
 
 
