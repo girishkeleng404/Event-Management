@@ -21,6 +21,7 @@ import nodemailer from "nodemailer";
 
 import authRoute from './routes/authRoute.js'
 import logoutRoute from './routes/logoutRoute.js'
+import userRoute from './routes/userRoute.js'
 import passport from './config/passport_config.js'
 import db from "./config/database.js";
 
@@ -70,44 +71,25 @@ app.use(authRoute);
 // logout route
 app.use(logoutRoute);
 
+app.use(userRoute);
 
 
 
+// app.get('/user_profile', async (req, res) => {
+//     const userId = req.query.id;
+//     try {
+//         const result = await db.query("SELECT * FROM user_profile WHERE user_id = $1", [userId])
+//         if (result.rows.length === 0) {
+//             return res.status(404).json({ message: "User not found" });
+//         }
 
-// app.get('/getUserData', (req, res) => {
-//     const token = req.query.token;
-//     if (token) {
-//         jwt.verify(token, secretKey, (err, user) => {
-//             if (err) {
-//                 return res.status(403).send('Invalid token');
-//             }
-//             console.log("fuck off")
-//             console.log(user);
-//             res.json(req.user);
-//         });
-//     } else {
-//         console.log("Token is required")
-//         res.status(400).send('Token is required');
+//         res.json(result.rows[0]);
+//     } catch (error) {
+
+//         console.log(error)
+//         res.status(500).json({ message: "Internal server error" });
 //     }
-// });
-
-
-
-app.get('/user_profile', async (req, res) => {
-    const userId = req.query.id;
-    try {
-        const result = await db.query("SELECT * FROM user_profile WHERE user_id = $1", [userId])
-        if (result.rows.length === 0) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        res.json(result.rows[0]);
-    } catch (error) {
-
-        console.log(error)
-        res.status(500).json({ message: "Internal server error" });
-    }
-})
+// })
 
 
 
