@@ -40,7 +40,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        sameSite: 'none',
+        sameSite: 'Strict',
         maxAge: 3600000,
         secure: "auto",
 
@@ -101,47 +101,47 @@ app.use(authRoute);
 
 
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:5173/auth/google/callback'
-    // scope: ['email','profile',]
-},
-    async function (accessToken, resfreshToken, profile, cb) {
+// passport.use(new GoogleStrategy({
+//     clientID: process.env.GOOGLE_CLIENT_ID,
+//     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//     callbackURL: 'http://localhost:5173/auth/google/callback'
+//     // scope: ['email','profile',]
+// },
+//     async function (accessToken, resfreshToken, profile, cb) {
 
-        try {
-            const check = await db.query("SELECT * FROM users WHERE email = $1", [profile.emails[0].value]);
-            if (check.rows.length === 0) {
-                const result = await db.query("INSERT INTO users (name,email,password) VALUES ($1, $2, $3) RETURNING *", [profile.displayName, profile.emails[0].value, 'google']);
-                console.log(profile);
-                return cb(null, result.rows[0]);
-            } else {
-                return cb(null, check.rows[0]);
-            }
-        } catch (error) {
-            console.log(error);
-        }
+//         try {
+//             const check = await db.query("SELECT * FROM users WHERE email = $1", [profile.emails[0].value]);
+//             if (check.rows.length === 0) {
+//                 const result = await db.query("INSERT INTO users (name,email,password) VALUES ($1, $2, $3) RETURNING *", [profile.displayName, profile.emails[0].value, 'google']);
+//                 console.log(profile);
+//                 return cb(null, result.rows[0]);
+//             } else {
+//                 return cb(null, check.rows[0]);
+//             }
+//         } catch (error) {
+//             console.log(error);
+//         }
 
-        // return cb(null, profile);
-    }
-))
-app.get('/auth/google',
-    passport.authenticate('google', { scope: ['openid', 'email', 'profile',] })
-)
+//         // return cb(null, profile);
+//     }
+// ))
+// app.get('/auth/google',
+//     passport.authenticate('google', { scope: ['openid', 'email', 'profile',] })
+// )
 
-app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: 'http://localhost:5173' }),
-    (req, res) => {
-        const user = req.user;
-        console.log(user);
-        console.log("fuck off")
-        const token = jwt.sign(req.user, secretKey);
-        const redirectUrl = `http://localhost:5173/profileForm?token=${token}`;
+// app.get('/auth/google/callback',
+//     passport.authenticate('google', { failureRedirect: 'http://localhost:5173' }),
+//     (req, res) => {
+//         const user = req.user;
+//         console.log(user);
+//         console.log("fuck off")
+//         const token = jwt.sign(req.user, secretKey);
+//         const redirectUrl = `http://localhost:5173/profileForm?token=${token}`;
 
-        // Redirect to the URL with the token
-        res.redirect(redirectUrl);
-    }
-)
+//         // Redirect to the URL with the token
+//         res.redirect(redirectUrl);
+//     }
+// )
 
 app.post('/logout', (req, res, cb) => {
     req.logout((err) => {
@@ -159,16 +159,16 @@ app.post('/logout', (req, res, cb) => {
     })
 })
 
-app.get('/profile', async (req, res) => {
+// app.get('/profile', async (req, res) => {
 
-    if (req.isAuthenticated()) {
-        const { id, name, email } = req.user;
+//     if (req.isAuthenticated()) {
+//         const { id, name, email } = req.user;
 
-        res.json({ id, name, email });
-    } else {
-        res.status(401).json({ message: "Unauthenticated" });
-    }
-})
+//         res.json({ id, name, email });
+//     } else {
+//         res.status(401).json({ message: "Unauthenticated" });
+//     }
+// })
 
 
 

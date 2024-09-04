@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { generateAuthToken } from '../auth.js'
 import db from '../config/database.js';
 import passport from 'passport';
-const saltRounds = process.env.NUMBER_OF_SALT||10;
+const saltRounds = 10;
 
 const register = async (req, res) => {
     const { name, email, password } = req.body;
@@ -51,7 +51,7 @@ const register = async (req, res) => {
     });
 }
 
-const login = (req, res) => {
+const login = async(req, res) => {
     if (!req.user) {
         return res.status(400).json({ message: "User not found or authentication failed" });
     }
@@ -65,4 +65,31 @@ const login = (req, res) => {
     console.log(req.user);
     res.json(req.user);
 };
-export { register, login };
+
+
+
+// const profile = async(req,res,next)=>{
+
+//     if (req.isAuthenticated()) {
+//         const { id, name, email } = req.user;
+
+//         res.json({ id, name, email });
+//     } else {
+//         res.status(401).json({ message: "Unauthenticated" });
+//     }
+//     // return next();
+// }
+const profile = async (req, res) => {
+    console.log('Authenticated:', req.isAuthenticated());
+    console.log('User:', req.user);
+    if (req.isAuthenticated()) {
+        const { id, name, email } = req.user;
+        res.json({ id, name, email });
+    } else {
+        res.status(401).json({ message: "Unauthenticated" });
+    }
+}
+
+
+
+export { register, login,profile };

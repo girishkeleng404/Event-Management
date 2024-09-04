@@ -1,9 +1,7 @@
-import passport from 'passport';
+import passport, { session } from 'passport';
 import LocalStrategy from "passport-local";
 import db from './database';
 import bcrypt from 'bcryptjs'
-
-
 
 
 passport.use(new LocalStrategy({ usernameField: 'email' },
@@ -29,6 +27,30 @@ passport.use(new LocalStrategy({ usernameField: 'email' },
 
 
 
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:5173/auth/google/callback'
+    // scope: ['email','profile',]
+},
+    async function (accessToken, resfreshToken, profile, cb) {
+
+        try {
+            const check = await db.query("SELECT * FROM users WHERE email = $1", [profile.emails[0].value]);
+            if (check.rows.length === 0) {
+                const result = await db.query("INSERT INTO users (name,email,password) VALUES ($1, $2, $3) RETURNING *", [profile.displayName, profile.emails[0].value, 'google']);
+                console.log(profile);
+                return cb(null, result.rows[0]);
+            } else {
+                return cb(null, check.rows[0]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        // return cb(null, profile);
+    }
+))
 
 
 passport.serializeUser((user, done) => {
@@ -42,3 +64,6 @@ passport.deserializeUser(async (id, done) => {
         done(err, null)
     }
 })
+
+
+export default passport;
