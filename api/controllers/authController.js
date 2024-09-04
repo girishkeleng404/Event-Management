@@ -41,7 +41,7 @@ const register = async (req, res) => {
                         sameSite: 'Strict' // Strictly same site
                     });
 
-                    // This should now also send the connect.sid cookie
+                    // This also send the connect.sid cookie
                     res.json(user);
                 });
             } catch (error) {
@@ -78,6 +78,22 @@ const profile = async (req, res) => {
     }
 }
 
+const getUserData = async(req,res)=>{
+    const token = req.query.token;
+    if (token) {
+        jwt.verify(token, secretKey, (err, user) => {
+            if (err) {
+                return res.status(403).send('Invalid token');
+            }
+            console.log("fuck off")
+            console.log(user);
+            res.json(req.user);
+        });
+    } else {
+        console.log("Token is required")
+        res.status(400).send('Token is required');
+    }
 
+}
 
-export { register, login,profile };
+export { register, login,profile,getUserData };

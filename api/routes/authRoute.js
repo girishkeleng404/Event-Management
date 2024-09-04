@@ -1,11 +1,12 @@
 import express from 'express';
 import passport from '../config/passport_config.js';
-import { login, profile, register } from '../controllers/authController.js';
+import { getUserData, login, profile, register } from '../controllers/authController.js';
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
 router.route('/register').post(register);
+// Local route
 router.route('/login').post(passport.authenticate('local'), login);
 
 // Google OAuth route
@@ -19,5 +20,6 @@ router.route('/auth/google/callback').get(passport.authenticate('google', { fail
 });
 
 router.route('/profile').get(profile);
+router.route('/getUserData').get(getUserData);
 
 export default router;

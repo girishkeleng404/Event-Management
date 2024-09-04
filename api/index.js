@@ -1,19 +1,14 @@
 import express from "express"
 import cors from "cors";
-import pg from "pg";
-import bcrypt from "bcryptjs";
 import session from "express-session";
 import bodyParser from "body-parser";
 import multer from "multer";
 import imageDownloader from "image-downloader";
 import path from "path";
 import { fileURLToPath } from "url";
-// import passport from "passport";
-import LocalStrategy from "passport-local";
 import { generateAuthToken } from "./auth.js";
 import fs from "fs";
 import cookieParser from "cookie-parser";
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { callbackify } from "util";
 import OpenIDConnectStrategy from "passport-openidconnect";
 import helmet from "helmet";
@@ -23,6 +18,7 @@ import razorpay from "razorpay";
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+
 import authRoute from './routes/authRoute.js'
 import logoutRoute from './routes/logoutRoute.js'
 import passport from './config/passport_config.js'
@@ -35,7 +31,6 @@ const app = express();
 const port = 4000;
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 const secretKey = process.env.JWT_SECTET_KEY;
 
@@ -52,11 +47,9 @@ app.use(session({
 
 }))
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 app.use(cookieParser());
 
 app.use(cors({
@@ -64,53 +57,41 @@ app.use(cors({
     credentials: true,
 }));
 
-
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.get('/api/data', (req, res) => {
     res.json({ message: "Success" });
 })
 
+// authentication route
 app.use(authRoute);
 
+// logout route
 app.use(logoutRoute);
 
-// app.post('/logout', (req, res, cb) => {
-//     req.logout((err) => {
-//         if (err) {
-//             return cb(err);
-//         }
-//         req.session.destroy((err) => {
+
+
+
+
+// app.get('/getUserData', (req, res) => {
+//     const token = req.query.token;
+//     if (token) {
+//         jwt.verify(token, secretKey, (err, user) => {
 //             if (err) {
-//                 return cb(err);
+//                 return res.status(403).send('Invalid token');
 //             }
-//             res.clearCookie('authToken', { path: '/' });
-//             res.clearCookie('connect.sid', { path: '/' });
-//             res.json({ message: 'Logged out successfully' });
-//         })
-//     })
-// })
+//             console.log("fuck off")
+//             console.log(user);
+//             res.json(req.user);
+//         });
+//     } else {
+//         console.log("Token is required")
+//         res.status(400).send('Token is required');
+//     }
+// });
 
 
-
-app.get('/getUserData', (req, res) => {
-    const token = req.query.token;
-    if (token) {
-        jwt.verify(token, secretKey, (err, user) => {
-            if (err) {
-                return res.status(403).send('Invalid token');
-            }
-            console.log("fuck off")
-            console.log(user);
-            res.json(req.user);
-        });
-    } else {
-        console.log("Token is required")
-        res.status(400).send('Token is required');
-    }
-});
 
 app.get('/user_profile', async (req, res) => {
     const userId = req.query.id;
