@@ -67,18 +67,6 @@ const login = async(req, res) => {
 };
 
 
-
-// const profile = async(req,res,next)=>{
-
-//     if (req.isAuthenticated()) {
-//         const { id, name, email } = req.user;
-
-//         res.json({ id, name, email });
-//     } else {
-//         res.status(401).json({ message: "Unauthenticated" });
-//     }
-//     // return next();
-// }
 const profile = async (req, res) => {
     console.log('Authenticated:', req.isAuthenticated());
     console.log('User:', req.user);

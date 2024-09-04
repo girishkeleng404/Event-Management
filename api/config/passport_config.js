@@ -5,9 +5,6 @@ import db from './database.js';
 import bcrypt from 'bcryptjs'
 
 
-// app.use(passport.initialize());
-// app.use(passport.session());
-
 
 passport.use(new LocalStrategy({ usernameField: 'email' },
     async (email, password, done) => {

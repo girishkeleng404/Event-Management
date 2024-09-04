@@ -1,6 +1,7 @@
 import express from 'express';
 import passport from '../config/passport_config.js';
 import { login, profile, register } from '../controllers/authController.js';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 

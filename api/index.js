@@ -71,14 +71,6 @@ app.use(cors({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// const db = new pg.Client({
-//     user: process.env.DB_USER,
-//     host: process.env.DB_HOST,
-//     database: process.env.DB_DATABASE,
-//     password: process.env.DB_PASSWORD,
-//     port: process.env.DB_PORT
-// })
-// db.connect();
 
 app.get('/api/data', (req, res) => {
     res.json({ message: "Success" });
@@ -87,64 +79,48 @@ app.get('/api/data', (req, res) => {
 app.use(authRoute);
 
 
-// app.post('/login', passport.authenticate('local'), (req, res) => {
-//     if (!req.user) {
-//         return res.status(400).json({ message: "User not found or authentication failed" });
+
+// passport.use(new GoogleStrategy({
+//     clientID: process.env.GOOGLE_CLIENT_ID,
+//     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//     callbackURL: 'http://localhost:5173/auth/google/callback'
+//     // scope: ['email','profile',]
+// },
+//     async function (accessToken, resfreshToken, profile, cb) {
+
+//         try {
+//             const check = await db.query("SELECT * FROM users WHERE email = $1", [profile.emails[0].value]);
+//             if (check.rows.length === 0) {
+//                 const result = await db.query("INSERT INTO users (name,email,password) VALUES ($1, $2, $3) RETURNING *", [profile.displayName, profile.emails[0].value, 'google']);
+//                 console.log(profile);
+//                 return cb(null, result.rows[0]);
+//             } else {
+//                 return cb(null, check.rows[0]);
+//             }
+//         } catch (error) {
+//             console.log(error);
+//         }
+
+//         // return cb(null, profile);
 //     }
-//     const authToken = generateAuthToken(req.user);
-//     res.cookie('authToken', authToken, {
-//         maxAge: 3600000, // 1 hour
-//         httpOnly: true,
-//         secure: true, // Send the cookie over HTTPS only
-//         sameSite: 'Strict' // Strictly same site
-//     });
-//     console.log(req.user);
-//     res.json(req.user);
-// })
+// ))
+// app.get('/auth/google',
+//     passport.authenticate('google', { scope: ['openid', 'email', 'profile',] })
+// )
 
+// app.get('/auth/google/callback',
+//     passport.authenticate('google', { failureRedirect: 'http://localhost:5173' }),
+//     (req, res) => {
+//         const user = req.user;
+//         console.log(user);
+//         console.log("fuck off")
+//         const token = jwt.sign(req.user, secretKey);
+//         const redirectUrl = `http://localhost:5173/profileForm?token=${token}`;
 
-
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:5173/auth/google/callback'
-    // scope: ['email','profile',]
-},
-    async function (accessToken, resfreshToken, profile, cb) {
-
-        try {
-            const check = await db.query("SELECT * FROM users WHERE email = $1", [profile.emails[0].value]);
-            if (check.rows.length === 0) {
-                const result = await db.query("INSERT INTO users (name,email,password) VALUES ($1, $2, $3) RETURNING *", [profile.displayName, profile.emails[0].value, 'google']);
-                console.log(profile);
-                return cb(null, result.rows[0]);
-            } else {
-                return cb(null, check.rows[0]);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-
-        // return cb(null, profile);
-    }
-))
-app.get('/auth/google',
-    passport.authenticate('google', { scope: ['openid', 'email', 'profile',] })
-)
-
-app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: 'http://localhost:5173' }),
-    (req, res) => {
-        const user = req.user;
-        console.log(user);
-        console.log("fuck off")
-        const token = jwt.sign(req.user, secretKey);
-        const redirectUrl = `http://localhost:5173/profileForm?token=${token}`;
-
-        // Redirect to the URL with the token
-        res.redirect(redirectUrl);
-    }
-)
+//         // Redirect to the URL with the token
+//         res.redirect(redirectUrl);
+//     }
+// )
 
 app.post('/logout', (req, res, cb) => {
     req.logout((err) => {
@@ -161,18 +137,6 @@ app.post('/logout', (req, res, cb) => {
         })
     })
 })
-
-// app.get('/profile', async (req, res) => {
-
-//     if (req.isAuthenticated()) {
-//         const { id, name, email } = req.user;
-
-//         res.json({ id, name, email });
-//     } else {
-//         res.status(401).json({ message: "Unauthenticated" });
-//     }
-// })
-
 
 
 
@@ -208,39 +172,6 @@ app.get('/user_profile', async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 })
-
-
-// app.get('/profile', async (req, res) => {
-//     // Check if the Authorization header is present
-//     const authHeader = req.headers['authorization'];
-//     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-
-//     if (token == null) return res.sendStatus(401); // If no token, return 401 Unauthorized
-
-//     try {
-//         // Verify the token
-//         const user = verifyAuthToken(token); // Implement this function based on your auth token verification logic
-
-//         // Assuming verifyAuthToken returns the user if the token is valid
-//         if (user) {
-//             req.user = user; // Optionally set the user in the request if needed
-//             // Proceed with your route logic
-//             if (req.isAuthenticated()) {
-//                 const { id, name, email } = req.user;
-//                 res.json({ id, name, email });
-//             } else {
-//                 res.status(401).json({ message: "Unauthenticated" });
-//             }
-//         } else {
-//             // If the token is not verified
-//             return res.status(403).json({ message: "Token is invalid or expired" });
-//         }
-//     } catch (error) {
-//         // Handle any other errors
-//         return res.status(500).json({ message: "An error occurred verifying the token" });
-//     }
-// });
-
 
 
 
@@ -319,38 +250,6 @@ app.post('/auth/verify-otp', async (req, res) => {
         console.log(error);
     }
 })
-
-
-
-
-
-
-
-
-
-
-
-
-// passport.use(new LocalStrategy({ usernameField: 'email' },
-//     async (email, password, done) => {
-//         try {
-//             const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
-//             if (result.rows.length > 0) {
-//                 const checkPassport = result.rows[0];
-//                 const match = await bcrypt.compare(password, checkPassport.password);
-//                 if (match) {
-//                     return done(null, checkPassport)
-//                 } else {
-//                     return done(null, false, { message: "Password is incorrect" });
-//                 }
-//             } else {
-//                 return done(null, false, { message: "User not found" });
-//             }
-//         } catch (error) {
-//             return done(error);
-//         }
-//     }
-// ))
 
 
 
