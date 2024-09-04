@@ -1,7 +1,7 @@
-import passport, { session } from 'passport';
+import passport from 'passport';
 import LocalStrategy from "passport-local";
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import db from './database';
+import db from './database.js';
 import bcrypt from 'bcryptjs'
 
 
