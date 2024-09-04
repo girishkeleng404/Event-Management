@@ -37,7 +37,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // const saltRounds = 10;
 
-const secretKey = process.env.SECTET_KEY;
+const secretKey = process.env.JWT_SECTET_KEY;
 
 app.use(session({
     secret: process.env.SESSION_SECRET,

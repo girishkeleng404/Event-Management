@@ -13,7 +13,7 @@ router.route('/auth/google').get(passport.authenticate('google', { scope: ['open
 
 router.route('/auth/google/callback').get(passport.authenticate('google', { failureRedirect: 'http://localhost:5173' }), (req, res) => {
     const user = req.user;
-    const token = jwt.sign(req.user, process.env.JWT_SECRET);
+    const token = jwt.sign(req.user, process.env.JWT_SECTET_KEY);
     const redirectUrl = `http://localhost:5173/profileForm?token=${token}`;
     res.redirect(redirectUrl);
 });
