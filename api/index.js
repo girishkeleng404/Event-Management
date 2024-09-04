@@ -65,88 +65,67 @@ app.get('/api/data', (req, res) => {
     res.json({ message: "Success" });
 })
 
-// authentication route
+// authentication routes
 app.use(authRoute);
 
 // logout route
 app.use(logoutRoute);
 
+// all user routes
 app.use(userRoute);
 
 
 
-// app.get('/user_profile', async (req, res) => {
-//     const userId = req.query.id;
+
+// app.post('/otpSend', async (req, res) => {
+//     // const { id } = req.params;
+//     const { email, isVarified, name } = req.body;
+//     const otp = generateOTP();
 //     try {
-//         const result = await db.query("SELECT * FROM user_profile WHERE user_id = $1", [userId])
-//         if (result.rows.length === 0) {
-//             return res.status(404).json({ message: "User not found" });
-//         }
+
+//         var transporter = nodemailer.createTransport({
+//             service: 'gmail',
+//             auth: {
+//                 user: 'girishkeleng30@gmail.com',
+//                 pass: 'vtbq xdgx eiec zamh'
+//             }
+//         });
+
+//         var mailOptions = {
+//             from: 'girishkeleng30@gmail.com',
+//             to: `${email}`,
+//             subject: 'Your One-Time Password (OTP) for Air',
+//             text: `Dear ${name},
+
+// Your One-Time Password (OTP) is ${otp}. Please use this code to complete your verification. Note that this OTP will expire in 5 minutes.
+
+// If you did not request this, please ignore this email.
+
+// Thank you,
+// The Air Team`
+//         };
+
+//         transporter.sendMail(mailOptions, function (error, info) {
+//             if (error) {
+//                 console.log(error);
+//                 res.status(500).send('Failed to send OTP');
+//             } else {
+//                 console.log('Email sent: ' + info.response);
+//                 res.status(200).send('OTP sent successfully');
+//             }
+//         });
+
+//         const expirationTime = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
+//         const result = await db.query("INSERT INTO otps(email_or_phone, otp, expiration_time, is_verified) VALUES ($1,$2,$3,$4) RETURNING *", [email, otp, expirationTime, isVarified]);
 
 //         res.json(result.rows[0]);
-//     } catch (error) {
 
-//         console.log(error)
-//         res.status(500).json({ message: "Internal server error" });
+
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).send('An error occurred while sending OTP');
 //     }
 // })
-
-
-
-function generateOTP() {
-    return Math.floor(100000 + Math.random() * 900000).toString();  // Generates a 6-digit OTP
-}
-
-
-app.post('/otpSend', async (req, res) => {
-    // const { id } = req.params;
-    const { email, isVarified, name } = req.body;
-    const otp = generateOTP();
-    try {
-
-        var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: 'girishkeleng30@gmail.com',
-                pass: 'vtbq xdgx eiec zamh'
-            }
-        });
-
-        var mailOptions = {
-            from: 'girishkeleng30@gmail.com',
-            to: `${email}`,
-            subject: 'Your One-Time Password (OTP) for Air',
-            text: `Dear ${name},
-
-Your One-Time Password (OTP) is ${otp}. Please use this code to complete your verification. Note that this OTP will expire in 5 minutes.
-
-If you did not request this, please ignore this email.
-
-Thank you,
-The Air Team`
-        };
-
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-                res.status(500).send('Failed to send OTP');
-            } else {
-                console.log('Email sent: ' + info.response);
-                res.status(200).send('OTP sent successfully');
-            }
-        });
-
-        const expirationTime = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
-        const result = await db.query("INSERT INTO otps(email_or_phone, otp, expiration_time, is_verified) VALUES ($1,$2,$3,$4) RETURNING *", [email, otp, expirationTime, isVarified]);
-
-        res.json(result.rows[0]);
-
-
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('An error occurred while sending OTP');
-    }
-})
 
 
 app.post('/auth/verify-otp', async (req, res) => {
