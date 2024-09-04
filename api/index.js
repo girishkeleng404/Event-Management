@@ -24,6 +24,7 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import authRoute from './routes/authRoute.js'
+import logoutRoute from './routes/logoutRoute.js'
 import passport from './config/passport_config.js'
 import db from "./config/database.js";
 
@@ -35,7 +36,6 @@ const port = 4000;
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// const saltRounds = 10;
 
 const secretKey = process.env.JWT_SECTET_KEY;
 
@@ -51,9 +51,6 @@ app.use(session({
     }
 
 }))
-
-
-
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -78,65 +75,23 @@ app.get('/api/data', (req, res) => {
 
 app.use(authRoute);
 
+app.use(logoutRoute);
 
-
-// passport.use(new GoogleStrategy({
-//     clientID: process.env.GOOGLE_CLIENT_ID,
-//     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//     callbackURL: 'http://localhost:5173/auth/google/callback'
-//     // scope: ['email','profile',]
-// },
-//     async function (accessToken, resfreshToken, profile, cb) {
-
-//         try {
-//             const check = await db.query("SELECT * FROM users WHERE email = $1", [profile.emails[0].value]);
-//             if (check.rows.length === 0) {
-//                 const result = await db.query("INSERT INTO users (name,email,password) VALUES ($1, $2, $3) RETURNING *", [profile.displayName, profile.emails[0].value, 'google']);
-//                 console.log(profile);
-//                 return cb(null, result.rows[0]);
-//             } else {
-//                 return cb(null, check.rows[0]);
-//             }
-//         } catch (error) {
-//             console.log(error);
+// app.post('/logout', (req, res, cb) => {
+//     req.logout((err) => {
+//         if (err) {
+//             return cb(err);
 //         }
-
-//         // return cb(null, profile);
-//     }
-// ))
-// app.get('/auth/google',
-//     passport.authenticate('google', { scope: ['openid', 'email', 'profile',] })
-// )
-
-// app.get('/auth/google/callback',
-//     passport.authenticate('google', { failureRedirect: 'http://localhost:5173' }),
-//     (req, res) => {
-//         const user = req.user;
-//         console.log(user);
-//         console.log("fuck off")
-//         const token = jwt.sign(req.user, secretKey);
-//         const redirectUrl = `http://localhost:5173/profileForm?token=${token}`;
-
-//         // Redirect to the URL with the token
-//         res.redirect(redirectUrl);
-//     }
-// )
-
-app.post('/logout', (req, res, cb) => {
-    req.logout((err) => {
-        if (err) {
-            return cb(err);
-        }
-        req.session.destroy((err) => {
-            if (err) {
-                return cb(err);
-            }
-            res.clearCookie('authToken', { path: '/' });
-            res.clearCookie('connect.sid', { path: '/' });
-            res.json({ message: 'Logged out successfully' });
-        })
-    })
-})
+//         req.session.destroy((err) => {
+//             if (err) {
+//                 return cb(err);
+//             }
+//             res.clearCookie('authToken', { path: '/' });
+//             res.clearCookie('connect.sid', { path: '/' });
+//             res.json({ message: 'Logged out successfully' });
+//         })
+//     })
+// })
 
 
 
@@ -172,11 +127,6 @@ app.get('/user_profile', async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 })
-
-
-
-
-
 
 
 
@@ -250,6 +200,7 @@ app.post('/auth/verify-otp', async (req, res) => {
         console.log(error);
     }
 })
+
 
 
 
