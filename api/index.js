@@ -17,11 +17,12 @@ import env from "dotenv"
 import razorpay from "razorpay";
 import Razorpay from "razorpay";
 import crypto from "crypto";
-import nodemailer from "nodemailer";
+
 
 import authRoute from './routes/authRoute.js'
 import logoutRoute from './routes/logoutRoute.js'
 import userRoute from './routes/userRoute.js'
+import profileRoute from './routes/profileRoute.js'
 import otpRoute from './routes/otpRoute.js'
 import passport from './config/passport_config.js'
 import db from "./config/database.js";
@@ -75,79 +76,8 @@ app.use(logoutRoute);
 // all user routes
 app.use(userRoute);
 
-
+// otp routes
 app.use(otpRoute);
-
-
-
-
-// app.post('/otpSend', async (req, res) => {
-//     // const { id } = req.params;
-//     const { email, isVarified, name } = req.body;
-//     const otp = generateOTP();
-//     try {
-
-//         var transporter = nodemailer.createTransport({
-//             service: 'gmail',
-//             auth: {
-//                 user: 'girishkeleng30@gmail.com',
-//                 pass: 'vtbq xdgx eiec zamh'
-//             }
-//         });
-
-//         var mailOptions = {
-//             from: 'girishkeleng30@gmail.com',
-//             to: `${email}`,
-//             subject: 'Your One-Time Password (OTP) for Air',
-//             text: `Dear ${name},
-
-// Your One-Time Password (OTP) is ${otp}. Please use this code to complete your verification. Note that this OTP will expire in 5 minutes.
-
-// If you did not request this, please ignore this email.
-
-// Thank you,
-// The Air Team`
-//         };
-
-//         transporter.sendMail(mailOptions, function (error, info) {
-//             if (error) {
-//                 console.log(error);
-//                 res.status(500).send('Failed to send OTP');
-//             } else {
-//                 console.log('Email sent: ' + info.response);
-//                 res.status(200).send('OTP sent successfully');
-//             }
-//         });
-
-//         const expirationTime = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
-//         const result = await db.query("INSERT INTO otps(email_or_phone, otp, expiration_time, is_verified) VALUES ($1,$2,$3,$4) RETURNING *", [email, otp, expirationTime, isVarified]);
-
-//         res.json(result.rows[0]);
-
-
-//     } catch (error) {
-//         console.error('Error:', error);
-//         res.status(500).send('An error occurred while sending OTP');
-//     }
-// })
-
-
-// app.post('/auth/verify-otp', async (req, res) => {
-//     const { email, frontOTP } = req.body;
-//     try {
-//         const otpRecord = await db.query("SELECT * FROM otps WHERE email_or_phone = $1 ORDER BY id DESC LIMIT 1", [email]);
-//         if (otpRecord.rows.length > 0 && otpRecord.rows[0].otp === frontOTP && otpRecord.rows[0].expiration_time > new Date()) {
-//             res.json({ success: true });
-//         } else {
-//             res.json({ success: false });
-//         }
-//     } catch (error) {
-//         res.json(error)
-//         console.log(error);
-//     }
-// })
-
-
 
 
 
@@ -165,11 +95,7 @@ passport.deserializeUser(async (id, done) => {
 })
 
 
-
-
-
-
-
+// ------------xxxxx----------------
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/');
@@ -237,30 +163,36 @@ app.post('/uploads', upload.array('photos', 100), async (req, res) => {
     }
 })
 
-app.post('/profileDetails/:id', async (req, res) => {
-    const { id } = req.params;
-    const { name, bio, social, profilePhoto, phone, email } = req.body;
-    try {
-        const profilePhotoArray = [profilePhoto];
-        const result = await db.query("INSERT INTO user_profile (user_id, name, bio, social_media_link, photos,phone,email) VALUES ($1, $2, $3, $4, $5,$6,$7) RETURNING *", [id, name, bio, social, profilePhotoArray, phone, email]);
+// --------------xxxxxxxxxxx----------------
 
-        // Assuming the user's session is already established and you want to update or save something specific after this operation
-        req.session.userProfile = result.rows[0]; // Example: Save the user profile in the session
+// All profileRoutes
+app.use(profileRoute);
 
-        // Save the session before sending the response
-        req.session.save(err => {
-            if (err) {
-                console.log(err);
-                return res.status(500).json({ message: "Error saving session" });
-            }
 
-            res.json(result.rows[0]);
-        });
-    } catch (err) {
-        console.log(err);
-        res.json({ message: "error" });
-    }
-});
+// app.post('/profileDetails/:id', async (req, res) => {
+//     const { id } = req.params;
+//     const { name, bio, social, profilePhoto, phone, email } = req.body;
+//     try {
+//         const profilePhotoArray = [profilePhoto];
+//         const result = await db.query("INSERT INTO user_profile (user_id, name, bio, social_media_link, photos,phone,email) VALUES ($1, $2, $3, $4, $5,$6,$7) RETURNING *", [id, name, bio, social, profilePhotoArray, phone, email]);
+
+//         // Assuming the user's session is already established and you want to update or save something specific after this operation
+//         req.session.userProfile = result.rows[0]; // Example: Save the user profile in the session
+
+//         // Save the session before sending the response
+//         req.session.save(err => {
+//             if (err) {
+//                 console.log(err);
+//                 return res.status(500).json({ message: "Error saving session" });
+//             }
+
+//             res.json(result.rows[0]);
+//         });
+//     } catch (err) {
+//         console.log(err);
+//         res.json({ message: "error" });
+//     }
+// });
 
 
 app.put('/profileDetails/:id', async (req, res) => {
