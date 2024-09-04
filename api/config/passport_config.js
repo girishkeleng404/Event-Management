@@ -1,7 +1,12 @@
 import passport, { session } from 'passport';
 import LocalStrategy from "passport-local";
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import db from './database';
 import bcrypt from 'bcryptjs'
+
+
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 
 passport.use(new LocalStrategy({ usernameField: 'email' },

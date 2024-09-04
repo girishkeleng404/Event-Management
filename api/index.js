@@ -8,7 +8,7 @@ import multer from "multer";
 import imageDownloader from "image-downloader";
 import path from "path";
 import { fileURLToPath } from "url";
-import passport from "passport";
+// import passport from "passport";
 import LocalStrategy from "passport-local";
 import { generateAuthToken } from "./auth.js";
 import fs from "fs";
@@ -24,12 +24,16 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import authRoute from './routes/authRoute.js'
+import passport from './config/passport_config.js'
+import db from "./config/database.js";
 
 
 env.config();
 
 const app = express();
 const port = 4000;
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // const saltRounds = 10;
 
@@ -63,19 +67,18 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-const db = new pg.Client({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_DATABASE,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
-})
-db.connect();
+// const db = new pg.Client({
+//     user: process.env.DB_USER,
+//     host: process.env.DB_HOST,
+//     database: process.env.DB_DATABASE,
+//     password: process.env.DB_PASSWORD,
+//     port: process.env.DB_PORT
+// })
+// db.connect();
 
 app.get('/api/data', (req, res) => {
     res.json({ message: "Success" });
@@ -101,47 +104,47 @@ app.use(authRoute);
 
 
 
-// passport.use(new GoogleStrategy({
-//     clientID: process.env.GOOGLE_CLIENT_ID,
-//     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//     callbackURL: 'http://localhost:5173/auth/google/callback'
-//     // scope: ['email','profile',]
-// },
-//     async function (accessToken, resfreshToken, profile, cb) {
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:5173/auth/google/callback'
+    // scope: ['email','profile',]
+},
+    async function (accessToken, resfreshToken, profile, cb) {
 
-//         try {
-//             const check = await db.query("SELECT * FROM users WHERE email = $1", [profile.emails[0].value]);
-//             if (check.rows.length === 0) {
-//                 const result = await db.query("INSERT INTO users (name,email,password) VALUES ($1, $2, $3) RETURNING *", [profile.displayName, profile.emails[0].value, 'google']);
-//                 console.log(profile);
-//                 return cb(null, result.rows[0]);
-//             } else {
-//                 return cb(null, check.rows[0]);
-//             }
-//         } catch (error) {
-//             console.log(error);
-//         }
+        try {
+            const check = await db.query("SELECT * FROM users WHERE email = $1", [profile.emails[0].value]);
+            if (check.rows.length === 0) {
+                const result = await db.query("INSERT INTO users (name,email,password) VALUES ($1, $2, $3) RETURNING *", [profile.displayName, profile.emails[0].value, 'google']);
+                console.log(profile);
+                return cb(null, result.rows[0]);
+            } else {
+                return cb(null, check.rows[0]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
 
-//         // return cb(null, profile);
-//     }
-// ))
-// app.get('/auth/google',
-//     passport.authenticate('google', { scope: ['openid', 'email', 'profile',] })
-// )
+        // return cb(null, profile);
+    }
+))
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['openid', 'email', 'profile',] })
+)
 
-// app.get('/auth/google/callback',
-//     passport.authenticate('google', { failureRedirect: 'http://localhost:5173' }),
-//     (req, res) => {
-//         const user = req.user;
-//         console.log(user);
-//         console.log("fuck off")
-//         const token = jwt.sign(req.user, secretKey);
-//         const redirectUrl = `http://localhost:5173/profileForm?token=${token}`;
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: 'http://localhost:5173' }),
+    (req, res) => {
+        const user = req.user;
+        console.log(user);
+        console.log("fuck off")
+        const token = jwt.sign(req.user, secretKey);
+        const redirectUrl = `http://localhost:5173/profileForm?token=${token}`;
 
-//         // Redirect to the URL with the token
-//         res.redirect(redirectUrl);
-//     }
-// )
+        // Redirect to the URL with the token
+        res.redirect(redirectUrl);
+    }
+)
 
 app.post('/logout', (req, res, cb) => {
     req.logout((err) => {
@@ -328,26 +331,26 @@ app.post('/auth/verify-otp', async (req, res) => {
 
 
 
-passport.use(new LocalStrategy({ usernameField: 'email' },
-    async (email, password, done) => {
-        try {
-            const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
-            if (result.rows.length > 0) {
-                const checkPassport = result.rows[0];
-                const match = await bcrypt.compare(password, checkPassport.password);
-                if (match) {
-                    return done(null, checkPassport)
-                } else {
-                    return done(null, false, { message: "Password is incorrect" });
-                }
-            } else {
-                return done(null, false, { message: "User not found" });
-            }
-        } catch (error) {
-            return done(error);
-        }
-    }
-))
+// passport.use(new LocalStrategy({ usernameField: 'email' },
+//     async (email, password, done) => {
+//         try {
+//             const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+//             if (result.rows.length > 0) {
+//                 const checkPassport = result.rows[0];
+//                 const match = await bcrypt.compare(password, checkPassport.password);
+//                 if (match) {
+//                     return done(null, checkPassport)
+//                 } else {
+//                     return done(null, false, { message: "Password is incorrect" });
+//                 }
+//             } else {
+//                 return done(null, false, { message: "User not found" });
+//             }
+//         } catch (error) {
+//             return done(error);
+//         }
+//     }
+// ))
 
 
 
