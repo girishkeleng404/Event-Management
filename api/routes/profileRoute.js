@@ -1,5 +1,5 @@
 import express from 'express';
-import { profileDetailsById, updateProfileDetailsById } from '../config/profileController.js';
+import { profile_detailByID, profileDetailsById, updateProfileDetailsById } from '../controllers/profileController.js';
 const router = express.Router();
 
 
@@ -8,5 +8,6 @@ router.route('/profileDetails/:id')
 .post(profileDetailsById)
 .put(updateProfileDetailsById);
 
+router.route('/profile_detail/:id').get(profile_detailByID);
 
 export default router;

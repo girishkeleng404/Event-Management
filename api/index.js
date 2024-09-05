@@ -170,23 +170,6 @@ app.use(profileRoute);
 
 
 
-app.get('/profile_detail/:id', async (req, res) => {
-    const { id } = req.params;
-
-    try {
-
-        const result = await db.query("SELECT * FROM user_profile WHERE user_id = $1", [id]);
-        res.json(result.rows[0]);
-        console.log(result.rows);
-
-
-
-    } catch (error) {
-        res.json({ message: "error" })
-        console.log(error);
-    }
-})
-
 app.get('/user_detail/:iid', async (req, res) => {
     const { iid } = req.params;
 

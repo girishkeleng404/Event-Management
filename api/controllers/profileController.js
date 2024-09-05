@@ -1,4 +1,4 @@
-import db from "./database.js";
+import db from "../config/database.js";
 
 const profileDetailsById = async (req,res)=>{
     const { id } = req.params;
@@ -51,13 +51,23 @@ const updateProfileDetailsById = async(req,res)=>{
             res.json(result.rows[0]);
         });
 
-
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: "error" });
     }
-
-
 }
 
-export { profileDetailsById,updateProfileDetailsById };
+const profile_detailByID = async(req,res)=>{
+    const { id } = req.params;
+
+    try {
+        const result = await db.query("SELECT * FROM user_profile WHERE user_id = $1", [id]);
+        res.json(result.rows[0]);
+        console.log(result.rows);
+    } catch (error) {
+        res.json({ message: "error" })
+        console.log(error);
+    }
+}
+
+export { profileDetailsById,updateProfileDetailsById,profile_detailByID };
