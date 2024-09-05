@@ -44,4 +44,15 @@ const bookingEditById = async (req,res)=>{
     }
 }
 
-export {bookingById,bookingEditById}
+const booking_details_By_Place_id = async(req,res)=>{
+    const { place_id } = req.params;
+    try {
+        const result = await db.query("SELECT * FROM listings WHERE id = $1 ORDER BY id DESC", [place_id]);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error)
+        res.send(error);
+    }
+}
+
+export {bookingById,bookingEditById,booking_details_By_Place_id}
