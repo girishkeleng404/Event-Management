@@ -169,105 +169,10 @@ app.post('/uploads', upload.array('photos', 100), async (req, res) => {
 // All profileRoutes
 app.use(profileRoute);
 
-
+// used by NewAds.jsx and Adds.jsx in clientSide
 app.use(listingRoute);
 
 // ------------------x-----------
-
-// app.post('/listingPost/:id', async (req, res) => {
-//     // const id= req.user.id;
-//     const { id } = req.params;
-//     const { title, type, address, addedPhotos, description, price, isSameDay, eventDate, checkIn, checkOut, time, guests, perks } = req.body;
-
-//     try {
-//         const result = await db.query("INSERT INTO listings (title,type,address, added_photos, description, price, is_same_day, perks, event_date, check_in, check_out, time,user_id,guests) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *", [title, type, address, addedPhotos, description, price, isSameDay, perks, eventDate, checkIn, checkOut, time, id, guests]);
-//         const place = result.rows[0];
-//         console.log(place)
-//         res.status(201).json({ place });
-//     } catch (error) {
-//         console.log(error)
-//         res.send(error);
-//     }
-// })
-app.get('/listingAdds/:id', async (req, res) => {
-    // const id= req.user.id;
-    const { id } = req.params;
-    try {
-        const result = await db.query("SELECT * FROM listings WHERE user_id = $1 ORDER BY id ASC", [id]);
-        res.json(result.rows);
-    } catch (error) {
-        console.log(error)
-        res.send(error);
-    }
-}
-)
-app.get('/listing/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const result = await db.query("SELECT * FROM listings WHERE id = $1 ORDER BY id ASC", [id]);
-        res.json(result.rows[0]);
-    } catch (error) {
-        console.log(error)
-        res.send(error);
-    }
-}
-)
-app.get('/listings', async (req, res) => {
-
-    try {
-        const result = await db.query("SELECT * FROM listings ORDER BY id ASC");
-        res.json(result.rows);
-    } catch (error) {
-        console.log(error)
-        res.send(error);
-    }
-}
-)
-
-app.put('/listing/:id', async (req, res) => {
-    const { id } = req.params;
-    const { title, type, address, addedPhotos, description, price, isSameDay, eventDate, checkIn, checkOut, time, guests, perks } = req.body;
-    try {
-        const result = await db.query("UPDATE listings SET title = $1, type = $2, address = $3, added_photos = $4, description = $5, price = $6, is_same_day = $7, perks = $8, event_date = $9, check_in = $10, check_out = $11, time = $12, guests = $13 WHERE id = $14 RETURNING *", [title, type, address, addedPhotos, description, price, isSameDay, perks, eventDate, checkIn, checkOut, time, guests, id]);
-        res.json(result.rows[0])
-    } catch (error) {
-        console.log(error)
-    }
-})
-
-
-
-
-
-// app.get('/listingsIndex', async (req, res) => {
-//     const { page = 1, limit = 12 } = req.query; // Default to page 1 and limit of 12
-
-//     try {
-//         const offset = (page - 1) * limit; // Calculate the offset
-//         const listingsQuery = `
-//         SELECT *
-//         FROM listings
-//         ORDER BY id ASC
-//         LIMIT $1 OFFSET $2
-//       `;
-
-//         const { rows } = await db.query(listingsQuery, [limit, offset]);
-//         const countQuery = `SELECT COUNT(*) FROM listings`;
-//         const { rows: countRows } = await db.query(countQuery);
-
-//         const totalListings = parseInt(countRows[0].count, 10);
-//         const totalPages = Math.ceil(totalListings / limit);
-
-//         res.json({
-//             listings: rows,
-//             totalPages,
-//             currentPage: parseInt(page, 10),
-//         });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//     }
-// });
 
 
 
