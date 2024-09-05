@@ -71,7 +71,7 @@ app.use(authRoute);
 // logout route
 app.use(logoutRoute);
 
-// all user routes
+// DetailsPage.jsx use this routes in client side
 app.use(userRoute);
 
 // otp routes

@@ -44,8 +44,6 @@ const upload_By_Link = async(req,res)=>{
 }
 
 
-
-
 const upload = multer({ storage: storage });
 
 const singleUpload = async(req,res)=>{
@@ -78,4 +76,4 @@ const multipleUpload = async(req,res)=>{
     }
 }
 
-export {upload_By_Link, singleUpload,multipleUpload};
+export {upload_By_Link, singleUpload,multipleUpload };

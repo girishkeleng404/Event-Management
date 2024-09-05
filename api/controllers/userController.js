@@ -18,6 +18,7 @@ const user_profile = async(req,res)=>{
 
 const user_detailByIid = async(req,res)=>{
     const { iid } = req.params;
+    console.log(iid+"check iid");
     try {
         const result = await db.query("SELECT * FROM user_profile WHERE user_id = $1", [iid]);
 
