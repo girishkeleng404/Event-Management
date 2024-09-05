@@ -8,6 +8,7 @@ router.route('/profileDetails/:id')
 .post(profileDetailsById)
 .put(updateProfileDetailsById);
 
+// ProfileHome.jsx client file uses the following route:
 router.route('/profile_detail/:id').get(profile_detailByID);
 
 export default router;
