@@ -6,17 +6,12 @@ import multer from "multer";
 import imageDownloader from "image-downloader";
 import path from "path";
 import { fileURLToPath } from "url";
-import { generateAuthToken } from "./auth.js";
 import fs from "fs";
 import cookieParser from "cookie-parser";
-import { callbackify } from "util";
 import OpenIDConnectStrategy from "passport-openidconnect";
 import helmet from "helmet";
 import jwt from "jsonwebtoken";
 import env from "dotenv"
-
-
-
 
 import authRoute from './routes/authRoute.js'
 import logoutRoute from './routes/logoutRoute.js'
@@ -26,6 +21,7 @@ import otpRoute from './routes/otpRoute.js'
 import listingRoute from './routes/listingRoute.js'
 import ISFS_Route from './routes/ISFS_Route.js'
 import RazorpayRoute from './routes/RazorpayRoute.js'
+import imageUploadRoute from './routes/imageUploadRoute.js'
 
 import passport from './config/passport_config.js'
 import db from "./config/database.js";
@@ -38,7 +34,6 @@ const port = 4000;
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const secretKey = process.env.JWT_SECTET_KEY;
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -85,86 +80,75 @@ app.use(otpRoute);
 
 
 
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-passport.deserializeUser(async (id, done) => {
-    try {
-        const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
-        done(null, result.rows[0]);
-    } catch (err) {
-        done(err, null)
-    }
-})
-
-
 // ------------xxxxx----------------
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    }
-});
+
+app.use(imageUploadRoute);
+
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'uploads/');
+//     },
+//     filename: (req, file, cb) => {
+//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+//         cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+//     }
+// });
 
 
-const uploaderDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploaderDir)) {
-    fs.mkdirSync(uploaderDir);
-}
-app.post('/upload_by_link', async (req, res) => {
-    const { link } = req.body;
-    const newName = "photo" + Date.now() + '.jpg';
-    const destinationPath = path.join(uploaderDir, newName);
-    try {
-        await imageDownloader.image({
-            url: link,
-            dest: destinationPath
-        })
-        console.log(newName)
-        res.json(newName);
-    } catch (error) {
-        console.error("Error downloading image:", error);
-        res.status(500).json({ message: "Error downloading image" });
-    }
-});
+// const uploaderDir = path.join(__dirname, 'uploads');
+// if (!fs.existsSync(uploaderDir)) {
+//     fs.mkdirSync(uploaderDir);
+// }
+
+// app.post('/upload_by_link', async (req, res) => {
+//     const { link } = req.body;
+//     const newName = "photo" + Date.now() + '.jpg';
+//     const destinationPath = path.join(uploaderDir, newName);
+//     try {
+//         await imageDownloader.image({
+//             url: link,
+//             dest: destinationPath
+//         })
+//         console.log(newName)
+//         res.json(newName);
+//     } catch (error) {
+//         console.error("Error downloading image:", error);
+//         res.status(500).json({ message: "Error downloading image" });
+//     }
+// });
 
 
+// const upload = multer({ storage: storage });
 
 
-const upload = multer({ storage: storage });
+// app.post('/upload', upload.single('profilePhoto'), async (req, res) => {
+//     if (!req.file) {
+//         console.error("No file in request.");
+//         return res.status(400).send({ message: 'No file uploaded. Please ensure the form is correctly configured and the field name matches.' });
+//     }
+//     try {
+//         console.log(req.file);
+//         res.send({ message: 'File uploaded successfully', fileName: req.file.filename });
+//     } catch (error) {
+//         console.error("Error handling the file upload:", error);
+//         res.status(500).send({ message: 'Error processing the file.' });
+//     }
+// });
 
-
-app.post('/upload', upload.single('profilePhoto'), async (req, res) => {
-    if (!req.file) {
-        console.error("No file in request.");
-        return res.status(400).send({ message: 'No file uploaded. Please ensure the form is correctly configured and the field name matches.' });
-    }
-    try {
-        console.log(req.file);
-        res.send({ message: 'File uploaded successfully', fileName: req.file.filename });
-    } catch (error) {
-        console.error("Error handling the file upload:", error);
-        res.status(500).send({ message: 'Error processing the file.' });
-    }
-});
-
-app.post('/uploads', upload.array('photos', 100), async (req, res) => {
-    if (!req.files || req.files.length === 0) {
-        console.error("No files in request.");
-        return res.status(400).send({ message: 'No files uploaded. Please ensure the form is correctly configured and the field name matches.' });
-    }
-    try {
-        console.log(req.files);
-        const fileNames = req.files.map(file => file.filename);
-        res.send(fileNames);
-    } catch (error) {
-        console.error("Error handling the file upload:", error);
-        res.status(500).send({ message: 'Error processing the file.' });
-    }
-})
+// app.post('/uploads', upload.array('photos', 100), async (req, res) => {
+//     if (!req.files || req.files.length === 0) {
+//         console.error("No files in request.");
+//         return res.status(400).send({ message: 'No files uploaded. Please ensure the form is correctly configured and the field name matches.' });
+//     }
+//     try {
+//         console.log(req.files);
+//         const fileNames = req.files.map(file => file.filename);
+//         res.send(fileNames);
+//     } catch (error) {
+//         console.error("Error handling the file upload:", error);
+//         res.status(500).send({ message: 'Error processing the file.' });
+//     }
+// })
 
 // --------------xxxxxxxxxxx----------------
 
@@ -177,7 +161,6 @@ app.use(listingRoute);
 // ------------------x-----------\
 // to short and search places
 app.use(ISFS_Route);
-
 
 
 // -------------xxxxxxxxxxxxx------------------
@@ -285,10 +268,6 @@ app.get('/booking_details/:place_id', async (req, res) => {
 }
 )
 
-
-
-
-
 // ------------xxxxxxxxxx--------------
 
 app.get('/checkOrderForHost/:placeId', async (req, res) => {
@@ -306,8 +285,6 @@ app.get('/checkOrderForHost/:placeId', async (req, res) => {
 
     }
 })
-
-
 
 app.listen(port, () => {
     console.log("Server is running on port 4000");
