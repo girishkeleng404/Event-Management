@@ -208,30 +208,30 @@ app.use(RazorpayRoute);
 // })
 
 
-app.get("/payment/:paymentId", async (req, res) => {
-    const { paymentId } = req.params;
-    const razorpay = new Razorpay({ key_id: process.env.RAZORPAY_KEY_ID, key_secret: process.env.RAZORPAY_KEY_SECRET });
+// app.get("/payment/:paymentId", async (req, res) => {
+//     const { paymentId } = req.params;
+//     const razorpay = new Razorpay({ key_id: process.env.RAZORPAY_KEY_ID, key_secret: process.env.RAZORPAY_KEY_SECRET });
 
 
-    try {
-        const payment = await razorpay.payments.fetch(paymentId);
+//     try {
+//         const payment = await razorpay.payments.fetch(paymentId);
 
-        if (!payment) {
-            return res.status(404).json({ message: "Payment not found" });
-        }
-        res.json({
-            status: payment.status,
-            method: payment.method,
-            amount: payment.amount,
-            currency: payment.currency,
-        })
+//         if (!payment) {
+//             return res.status(404).json({ message: "Payment not found" });
+//         }
+//         res.json({
+//             status: payment.status,
+//             method: payment.method,
+//             amount: payment.amount,
+//             currency: payment.currency,
+//         })
 
 
-    } catch (error) {
-        res.json({ message: "Error fetching payment" })
-    }
+//     } catch (error) {
+//         res.json({ message: "Error fetching payment" })
+//     }
 
-})
+// })
 
 app.post("/order/validate", async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
