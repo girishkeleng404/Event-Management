@@ -17,4 +17,15 @@ const listingPostById = async(req,res)=>{
 
 }
 
-export {listingPostById};
+const listingAddsById = async(req,res)=>{
+    const { id } = req.params;
+    try {
+        const result = await db.query("SELECT * FROM listings WHERE user_id = $1 ORDER BY id ASC", [id]);
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error)
+        res.send(error);
+    }
+}
+
+export {listingPostById, listingAddsById};
