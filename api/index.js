@@ -24,6 +24,7 @@ import logoutRoute from './routes/logoutRoute.js'
 import userRoute from './routes/userRoute.js'
 import profileRoute from './routes/profileRoute.js'
 import otpRoute from './routes/otpRoute.js'
+import listingRoute from './routes/listingRoute.js'
 import passport from './config/passport_config.js'
 import db from "./config/database.js";
 
@@ -169,7 +170,7 @@ app.post('/uploads', upload.array('photos', 100), async (req, res) => {
 app.use(profileRoute);
 
 
-
+app.use(listingRoute);
 
 // ------------------x-----------
 
