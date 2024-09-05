@@ -2,15 +2,9 @@ import express from "express"
 import cors from "cors";
 import session from "express-session";
 import bodyParser from "body-parser";
-import multer from "multer";
-import imageDownloader from "image-downloader";
 import path from "path";
 import { fileURLToPath } from "url";
-import fs from "fs";
 import cookieParser from "cookie-parser";
-import OpenIDConnectStrategy from "passport-openidconnect";
-import helmet from "helmet";
-import jwt from "jsonwebtoken";
 import env from "dotenv"
 
 import authRoute from './routes/authRoute.js'
@@ -22,6 +16,7 @@ import listingRoute from './routes/listingRoute.js'
 import ISFS_Route from './routes/ISFS_Route.js'
 import RazorpayRoute from './routes/RazorpayRoute.js'
 import imageUploadRoute from './routes/imageUploadRoute.js'
+import bookingRoute from './routes/bookingRoute.js'
 
 import passport from './config/passport_config.js'
 import db from "./config/database.js";
@@ -42,7 +37,8 @@ app.use(session({
     cookie: {
         sameSite: 'Strict',
         maxAge: 3600000,
-        secure: "auto",
+        httpOnly: true,
+        secure: 'auto',
 
     }
 
@@ -77,80 +73,9 @@ app.use(userRoute);
 // otp routes
 app.use(otpRoute);
 
-
-
-
-// ------------xxxxx----------------
-
+// PhotoUploader and PhotosUploader.jsx use this route in client side
 app.use(imageUploadRoute);
 
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'uploads/');
-//     },
-//     filename: (req, file, cb) => {
-//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-//         cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-//     }
-// });
-
-
-// const uploaderDir = path.join(__dirname, 'uploads');
-// if (!fs.existsSync(uploaderDir)) {
-//     fs.mkdirSync(uploaderDir);
-// }
-
-// app.post('/upload_by_link', async (req, res) => {
-//     const { link } = req.body;
-//     const newName = "photo" + Date.now() + '.jpg';
-//     const destinationPath = path.join(uploaderDir, newName);
-//     try {
-//         await imageDownloader.image({
-//             url: link,
-//             dest: destinationPath
-//         })
-//         console.log(newName)
-//         res.json(newName);
-//     } catch (error) {
-//         console.error("Error downloading image:", error);
-//         res.status(500).json({ message: "Error downloading image" });
-//     }
-// });
-
-
-// const upload = multer({ storage: storage });
-
-
-// app.post('/upload', upload.single('profilePhoto'), async (req, res) => {
-//     if (!req.file) {
-//         console.error("No file in request.");
-//         return res.status(400).send({ message: 'No file uploaded. Please ensure the form is correctly configured and the field name matches.' });
-//     }
-//     try {
-//         console.log(req.file);
-//         res.send({ message: 'File uploaded successfully', fileName: req.file.filename });
-//     } catch (error) {
-//         console.error("Error handling the file upload:", error);
-//         res.status(500).send({ message: 'Error processing the file.' });
-//     }
-// });
-
-// app.post('/uploads', upload.array('photos', 100), async (req, res) => {
-//     if (!req.files || req.files.length === 0) {
-//         console.error("No files in request.");
-//         return res.status(400).send({ message: 'No files uploaded. Please ensure the form is correctly configured and the field name matches.' });
-//     }
-//     try {
-//         console.log(req.files);
-//         const fileNames = req.files.map(file => file.filename);
-//         res.send(fileNames);
-//     } catch (error) {
-//         console.error("Error handling the file upload:", error);
-//         res.status(500).send({ message: 'Error processing the file.' });
-//     }
-// })
-
-// --------------xxxxxxxxxxx----------------
 
 // All profileRoutes
 app.use(profileRoute);
@@ -158,65 +83,65 @@ app.use(profileRoute);
 // used by NewAds.jsx and Adds.jsx in clientSide
 app.use(listingRoute);
 
-// ------------------x-----------\
+
 // to short and search places
 app.use(ISFS_Route);
-
-
-// -------------xxxxxxxxxxxxx------------------
 
 
 app.use(RazorpayRoute);
 
 
+app.use(bookingRoute);
+
+
 // ----------------xxxxxxxxxx----------------
 
-app.post('/booking/:id', async (req, res) => {
-    const { user_id, name, guests, email, phone, note, paymentId, orderId, signature } = req.body;
-    const { id } = req.params;
+// app.post('/booking/:id', async (req, res) => {
+//     const { user_id, name, guests, email, phone, note, paymentId, orderId, signature } = req.body;
+//     const { id } = req.params;
 
-    try {
-        // Ensure these fields are either valid strings or null
-        const sanitizedOrderId = orderId || null;
-        const sanitizedPaymentId = paymentId || null;
-        const sanitizedSignature = signature || null;
-        console.log(paymentId, orderId, signature)
+//     try {
+//         // Ensure these fields are either valid strings or null
+//         const sanitizedOrderId = orderId || null;
+//         const sanitizedPaymentId = paymentId || null;
+//         const sanitizedSignature = signature || null;
+//         console.log(paymentId, orderId, signature)
 
-        const result = await db.query(
-            "INSERT INTO booking (name, guest_num, email, phone_no, note, user_id, place_id, razorpay_order_id, razorpay_payment_id, razorpay_signature) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
-            [name, guests, email, phone, note, user_id, id, sanitizedOrderId, sanitizedPaymentId, sanitizedSignature]
-        );
+//         const result = await db.query(
+//             "INSERT INTO booking (name, guest_num, email, phone_no, note, user_id, place_id, razorpay_order_id, razorpay_payment_id, razorpay_signature) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
+//             [name, guests, email, phone, note, user_id, id, sanitizedOrderId, sanitizedPaymentId, sanitizedSignature]
+//         );
 
-        // Check if booking was successfully inserted
-        if (result.rows.length === 0) {
-            return res.status(404).json({ message: "Booking not found" });
-        }
+//         // Check if booking was successfully inserted
+//         if (result.rows.length === 0) {
+//             return res.status(404).json({ message: "Booking not found" });
+//         }
 
-        // Return the newly inserted booking data
-        res.json(result.rows[0]);
-    } catch (error) {
-        console.error("Error inserting booking:", error);
-        res.status(500).json({ message: "Error inserting booking" });
-    }
-});
+//         // Return the newly inserted booking data
+//         res.json(result.rows[0]);
+//     } catch (error) {
+//         console.error("Error inserting booking:", error);
+//         res.status(500).json({ message: "Error inserting booking" });
+//     }
+// });
 
 
 
-app.put("/bookingEdit/:id", async (req, res) => {
-    const { id } = req.params;
-    const { user_id, name, guests, email, phone } = req.body;
-    try {
+// app.put("/bookingEdit/:id", async (req, res) => {
+//     const { id } = req.params;
+//     const { user_id, name, guests, email, phone } = req.body;
+//     try {
 
-        const response = await db.query("UPDATE booking SET name=$1, guest_num = $2, email = $3, phone_no = $4 WHERE user_id = $5 AND place_id = $6 AND guest_num = $7 RETURNING * ", [name, guests, email, phone, user_id, id, guests]);
-        console.log(response.rows[0]);
-        res.json(response.rows[0]);
+//         const response = await db.query("UPDATE booking SET name=$1, guest_num = $2, email = $3, phone_no = $4 WHERE user_id = $5 AND place_id = $6 AND guest_num = $7 RETURNING * ", [name, guests, email, phone, user_id, id, guests]);
+//         console.log(response.rows[0]);
+//         res.json(response.rows[0]);
 
-    } catch (error) {
-        console.log(error);
+//     } catch (error) {
+//         console.log(error);
 
-    }
+//     }
 
-})
+// })
 
 
 // -------------xxxxxxxxxxxx------------
