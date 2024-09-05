@@ -17,6 +17,7 @@ import ISFS_Route from './routes/ISFS_Route.js'
 import RazorpayRoute from './routes/RazorpayRoute.js'
 import imageUploadRoute from './routes/imageUploadRoute.js'
 import bookingRoute from './routes/bookingRoute.js'
+import orderRoute from './routes/orderRoute.js'
 
 import passport from './config/passport_config.js'
 import db from "./config/database.js";
@@ -94,42 +95,8 @@ app.use(RazorpayRoute);
 app.use(bookingRoute);
 
 
+app.use(orderRoute);
 
-// -------------xxxxxxxxxxxx------------
-
-app.get("/orders/:id", async (req, res) => {
-    const { id } = req.params;
-    try {
-        const response = await db.query("SELECT * FROM booking WHERE user_id = $1", [id]);
-        if (response.rows.length > 0) {
-            res.json(response.rows);
-        } else {
-            res.status(404).json({ message: "No orders found for this user" });
-        }
-    } catch (error) {
-        console.error('Error fetching orders:', error);
-        res.status(500).json({ message: "An error occurred while fetching orders", error });
-    }
-});
-
-
-app.get("/orders/:user_id/:place_id", async (req, res) => {
-    const { user_id, place_id } = req.params;
-    try {
-        const response = await db.query(
-            "SELECT * FROM booking WHERE user_id = $1 AND place_id = $2",
-            [user_id, place_id]
-        );
-        if (response.rows.length > 0) {
-            res.json(response.rows);
-        } else {
-            res.status(404).json({ message: "No orders found for this user and place" });
-        }
-    } catch (error) {
-        console.error('Error fetching orders:', error);
-        res.status(500).json({ message: "An error occurred while fetching orders", error });
-    }
-});
 
 
 // ------------xxxxxxxxxx--------------
