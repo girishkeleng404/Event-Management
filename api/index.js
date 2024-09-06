@@ -20,7 +20,6 @@ import bookingRoute from './routes/bookingRoute.js'
 import orderRoute from './routes/orderRoute.js'
 
 import passport from './config/passport_config.js'
-import db from "./config/database.js";
 
 
 env.config();
@@ -29,7 +28,6 @@ const app = express();
 const port = 4000;
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -77,45 +75,20 @@ app.use(otpRoute);
 // PhotoUploader and PhotosUploader.jsx use this route in client side
 app.use(imageUploadRoute);
 
-
 // All profileRoutes
 app.use(profileRoute);
 
 // used by NewAds.jsx and Adds.jsx in clientSide
 app.use(listingRoute);
 
-
 // to short and search places
 app.use(ISFS_Route);
 
-
 app.use(RazorpayRoute);
-
 
 app.use(bookingRoute);
 
-
 app.use(orderRoute);
-
-
-
-// ------------xxxxxxxxxx--------------
-
-app.get('/checkOrderForHost/:placeId', async (req, res) => {
-    const { placeId } = req.params;
-
-    try {
-        const result = await db.query("SELECT * FROM booking WHERE place_id = $1", [placeId]);
-
-        if (result.rows.length === 0) {
-            return res.status(404).json({ message: "No orders found for this place" })
-        }
-        res.json(result.rows);
-    } catch (error) {
-        console.log(error);
-
-    }
-})
 
 app.listen(port, () => {
     console.log("Server is running on port 4000");

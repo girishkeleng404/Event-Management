@@ -36,4 +36,21 @@ const orders_By_UserId_Place_id = async(req,res)=>{
 
 }
 
-export {ordersById,orders_By_UserId_Place_id};
+const checkOrderForHostByplaceId = async(req,res)=>{
+    const { placeId } = req.params;
+
+    try {
+        const result = await db.query("SELECT * FROM booking WHERE place_id = $1", [placeId]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "No orders found for this place" })
+        }
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error);
+
+    }
+
+}
+
+export {ordersById,orders_By_UserId_Place_id,checkOrderForHostByplaceId};
