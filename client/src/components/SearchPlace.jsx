@@ -93,7 +93,7 @@ export default function SearchPlace() {
                     {searchData && searchData.map((item, inx) => (
                         <Link to={`/DetailsPage/${item.id}`} key={item.id || inx} className="flex flex-col ">
 
-                            <div className=" flex flex-col justify-center items-center my-4">
+                            <div className=" flex flex-col justify-center items-start my-4">
 
 
                                 <div>
