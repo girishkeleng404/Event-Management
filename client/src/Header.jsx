@@ -11,6 +11,7 @@ import { UserContext } from './UserContex';
 import axios from 'axios';
 import Location from './components/Location';
 import SearchIcon from '@mui/icons-material/Search';
+import Switch from './components/toggle/Switch';
 
 
 export default function Header({ setSearchData }) {
@@ -126,7 +127,7 @@ export default function Header({ setSearchData }) {
                     </div>
 
                 </Popup>
-
+                <Switch/>
 
 
 
