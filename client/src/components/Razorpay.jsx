@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button"
 
 export default function Razorpay({data,totalPrice,twentyPercent,setOrderId,paymentId, setPaymentId, setSignature, setResponseState, setVerify_Payment_Signature,guests}) {
 
@@ -162,7 +163,8 @@ useEffect(()=>{
                                 <div className="text-xl"> ₹{totalPriceAfter} </div>
                             </div>
 
-                            <button className="bg-primary" onClick={paymentHandler}>Pay</button>
+                            {/* <button className="bg-primary" onClick={paymentHandler}>Pay</button> */}
+                            <Button onClick={paymentHandler}>Next</Button>
                         </div>
         </div>
     )

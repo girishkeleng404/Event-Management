@@ -20,7 +20,7 @@ export default function BookingInput({ name, setName, email, setEmail, guests, s
                 </div>
 
                 <div className="grid w-full max-w-sm items-center gap-1.5">
-                    <Label htmlFor="email">Guests</Label>
+                    <Label htmlFor="guest">Guests</Label>
                     <Input type="number" id="guets" placeholder="" value={guests} onChange={ev => { setGuests(ev.target.value) }} />
                 </div>
 
@@ -31,14 +31,21 @@ export default function BookingInput({ name, setName, email, setEmail, guests, s
                 </div> */}
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="email">Email</Label>
-                    <Input type="email" id="email" placeholder="" value={email} onChange={ev => { setEmail(ev.target.value) }}/>
+                    <Input type="email" id="email" placeholder="" value={email} onChange={ev => { setEmail(ev.target.value) }} />
                 </div>
 
 
-                <div className="flex items-center gap-2">
+                {/* <div className="flex items-center gap-2">
                     <label className="lg:text-xl">Phone: </label>
                     <input type="text" className="h-7 lg:h-8" value={phone} onChange={ev => { setPhone(ev.target.value) }} />
+                </div> */}
+
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Label htmlFor="phone">Phone No:</Label>
+                    <Input type="text" id="phone" value={phone} onChange={ev => { setPhone(ev.target.value) }} />
                 </div>
+
+
             </div>
 
             <div className="grid w-full gap-1.5">
