@@ -1,5 +1,7 @@
 import { useContext, useState } from "react"
 import { UserContext } from "../../UserContex"
+// import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 
 export default function BookingInput({ name, setName, email, setEmail, guests, setGuests, phone, setPhone, note, setNote }) {
 
@@ -28,7 +30,7 @@ export default function BookingInput({ name, setName, email, setEmail, guests, s
                 </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
                 <label className="lg:text-xl">Preference:</label>
                 <textarea
                     name="Preference"
@@ -38,6 +40,14 @@ export default function BookingInput({ name, setName, email, setEmail, guests, s
                     onChange={(ev) => setNote(ev.target.value)}
                     className="border rounded p-2 h-24 lg:h-32"
                 ></textarea>
+            </div> */}
+            <div className="grid w-full gap-1.5">
+                {/* <Label htmlFor="message-2">Your Message</Label>s */}
+                <label htmlFor="message-2">Your Preferences</label>
+                <Textarea placeholder="Type your message here." id="message-2" />
+                <p className="text-sm text-muted-foreground">
+                    Your message will be copied to the support team.
+                </p>
             </div>
 
         </div>
