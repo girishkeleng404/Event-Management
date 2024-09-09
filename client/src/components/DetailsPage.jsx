@@ -24,7 +24,7 @@ export default function DetailsPage() {
         const fetchData = async () => {
             try {
                 await axios.get(`/listing/${id}`, { withCredentials: true }).then(response => {
-                    console.log(response.data)
+                    // console.log(response.data)
                     setListingData(response.data)
                     setIid(response.data.user_id);
                 })

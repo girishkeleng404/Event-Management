@@ -43,8 +43,7 @@ export default function BookingInput({ name, setName, email, setEmail, guests, s
             </div> */}
             <div className="grid w-full gap-1.5">
                 <Label htmlFor="message-2">Your Preferences</Label>
-                {/* <label htmlFor="message-2">Your Preferences</label> */}
-                <Textarea placeholder="Type your message here." id="message-2" />
+                <Textarea placeholder="Type your message here." id="message-2" value={note}  onChange={(ev) => setNote(ev.target.value)}  />
                 <p className="text-sm text-muted-foreground">
                     Your message will be copied to the host.
                 </p>
